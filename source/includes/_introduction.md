@@ -80,7 +80,7 @@ api.kittens.get
 ```python
 import kittn
 
-api = kittn.authorize('meowmeowmeow')
+api = kittn.authorize('meowmeowmeow')s
 api.kittens.get()
 ```
 
