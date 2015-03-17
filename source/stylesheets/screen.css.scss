@@ -305,8 +305,10 @@ html, body {
     float:left;
     color: $lang-select-text;
     text-decoration: none;
-    padding: 0 10px;
-    line-height: 30px;
+//    padding: 0 40px;
+		padding: 0 10px;
+//    line-height: 69px;
+		line-height: 30px;
     outline: 0;
 
     &:active, &:focus {
