@@ -8,6 +8,7 @@ toc_footers:
   - <a href='https://www.diffbot.com/plans/trial' target="_blank">Sign Up for a Developer Token</a>
   - <a href='https://github.com/diffbot' target="_blank">Client libraries</a>
   - <a href='http://support.diffbot.com' target="_blank">Diffbot Support</a>
+  - <a href='https://github.com/diffbot/Diffbot-Documentation/tree/master/source/includes' target="_blank">Suggest Edits</a>
 
 
 includes:
