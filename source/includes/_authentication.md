@@ -1,33 +1,13 @@
-# Authentication
+## Authentication
 
-> To authorize, use this code:
+Diffbot uses API tokens to grant access to the API. You can register for a Diffbot API key [here](https://www.diffbot.com/plans/trial).
 
-```ruby
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
 
-```python
-import kittn
+Diffbot expects for the API token to be included in all API requests to the server as a query parameter like so:
 
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`?token=mrrobotico`
 
 <aside class="notice">
-You must replace `meowmeowmeow` with your personal API key.
+You must replace <code>mrrobotico</code> with your personal API token.
 </aside>

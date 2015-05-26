@@ -5,29 +5,16 @@ Pages not currently supported by an extraction API will return "other."
 ## Request
 
 
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+> Example Request
 
 ```shell
-curl "http://api.diffbot.com/v3/analyze?token=...&url=..."
+curl "http://api.diffbot.com/v3/analyze?token={token}&url=http%3A%2F%2Ftechcrunch.com%2F2012%2F05%2F31%2Fdiffbot-raises-2-million-seed-round-for-web-content-extraction-technology%2F"
 ```
 
 To use the Analyze API, perform a HTTP GET request on the following endpoint:
 
 `GET http://api.diffbot.com/v3/analyze`
-<aside class="warning">If you don't URL encode the url, Diffbot returns error code 500.</aside>
+<aside class="notice">Remember to url-encode all querystring parameters!</aside>
 
 
 <table class="controls table table-bordered" id="arguments" border="0" cellpadding="5">
@@ -67,26 +54,9 @@ To use the Analyze API, perform a HTTP GET request on the following endpoint:
         </tr></tbody></table>
 
 ## Response 
-```ruby
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
 
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/3"
-  -H "Authorization: meowmeowmeow"
-```
-
-> The above command returns JSON structured like this:
+> If successful, you'll receive this response:
 
 ```json
 {
@@ -210,16 +180,20 @@ The default fields returned:
 
 
 <aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+Remember — a happy robot is an authenticated robot!
 </aside>
-## Authentication
+
+
+## Options
+
+### Authentication
 
 You can supply Diffbot with basic authentication credentials or custom HTTP headers (see below) to access intranet pages or other sites that require a login.
 
-###Basic Authentication
+### Basic Authentication
 To access pages that require a login/password ([using basic access authentication](http://en.wikipedia.org/wiki/Basic_access_authentication)), include the username and password in your `url` parameter, e.g.: `url=http%3A%2F%2FUSERNAME:PASSWORD@www.diffbot.com`.
 
-## Custom HTTP Headers
+### Custom HTTP Headers
 
 You can supply Diffbot APIs with custom values for the user-agent, referer, cookie, or accept-language values in the HTTP request. These will be used in place of the Diffbot default values.
 

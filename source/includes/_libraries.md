@@ -37,7 +37,8 @@ We commissioned and monitor the following libraries from our stellar group of co
   <li><a target="_blank" href="https://github.com/diffbot/diffbot-rust-client">Rust</a></li>
   <li><a target="_blank" href="https://github.com/diffbot/diffbot-scala-client">Scala</a></li>
 </ul>
-###Contributed libraries
+
+<h3 class="toc-ignore"> Contributed libraries</h3>
 Thanks to the following developers for open-sourcing their own Diffbot client bindings.
 
 

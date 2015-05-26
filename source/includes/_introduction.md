@@ -1,51 +1,67 @@
-# Introduction
+<h1 class="section-header">Introduction</h1>
+
+Welcome to the Diffbot API Documention. Diffbot enables you to extract articles, products, images, videos, discussions, and more from any web page! 
 
 Using AI, computer vision, machine learning and natural language processing, Diffbot provides developers numerous tools to understand and extract data from any web page.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+We have sample code for you in Ruby and Python in the dark area to the right. cURL is shown by default, but you can use the tabs on the top right to switch the programming language. 
 
-If you notice the docs are out of date or are unclear, please don't be shy about clicking the "Suggest Edits" link! We're working to keep these docs up to date, however sometimes we get behind – and we'd love your help.
+If you notice the docs are unclear or there's a typo, please don't be shy about clicking the "Suggest Edits" link! **We're working hard to keep these docs up to date**, however sometimes we get behind – and we'd love your help.
 
 ##Helper Libraries
 * [Diffbot on Github](http://www.github.com/diffbot)
 * [All Libraries](http://www.github.com/diffbot)
 
 We commissioned and monitor the following libraries from our stellar group of community developers. All libraries are available via our [Github repository](https://github.com/diffbot).
-<ul>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-as3-client">ActionScript3</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-bash-client">Bash</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-c-client">C</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-cpp-client">C++</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-csharp-client">C#</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-clojure-client">Clojure</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-coffeescript-client">Coffeescript</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-d-client">D</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-dart-client">Dart</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-delphi-client">Delphi</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-erlang-client">Erlang</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-excel-client">Excel</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-fortran-client">FORTRAN</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-groovy-client">Groovy</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-go-client">Go</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-google-apps-client">Google Apps</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-haskell-client">Haskell</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-java-client">Java</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-js-client">Javascript</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-lisp-client">Common Lisp</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-matlab-client">MATLAB</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-objc-client">Objective C</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-ocaml-client">Ocaml</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-octave-client">Octave</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-perl-client">Perl</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-php-client">PHP</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-plsql-client">PL/SQL</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-powershell-client">Powershell</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-prolog-client">Prolog</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-python-client">Python</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-rust-client">Rust</a></li>
-  <li><a target="_blank" href="https://github.com/diffbot/diffbot-scala-client">Scala</a></li>
-</ul>
-###Contributed libraries
+
+<ul class="list-unstyled">
+  <li>
+    <ul class="list-unstyled">
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-as3-client">ActionScript3</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-bash-client">Bash</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-c-client">C</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-cpp-client">C++</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-csharp-client">C#</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-clojure-client">Clojure</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-coffeescript-client">Coffeescript</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-d-client">D</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-dart-client">Dart</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-delphi-client">Delphi</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-erlang-client">Erlang</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-excel-client">Excel</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-fortran-client">FORTRAN</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-groovy-client">Groovy</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-go-client">Go</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-google-apps-client">Google Apps</a></li>
+    </ul>
+  </li>
+  <li>
+    <ul class="list-unstyled">
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-haskell-client">Haskell</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-java-client">Java</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-js-client">Javascript</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-lisp-client">Common Lisp</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-matlab-client">MATLAB</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-objc-client">Objective C</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-ocaml-client">Ocaml</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-octave-client">Octave</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-perl-client">Perl</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-php-client">PHP</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-plsql-client">PL/SQL</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-powershell-client">Powershell</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-prolog-client">Prolog</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-python-client">Python</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-rust-client">Rust</a></li>
+      <li><a target="_blank" href="https://github.com/diffbot/diffbot-scala-client">Scala</a></li>
+
+    </ul>
+  </li>
+
+
+  </ul>
+
+
+<h3 class="toc-ignore">Contributed libraries</h3>
 Thanks to the following developers for open-sourcing their own Diffbot client bindings.
 
 <ul>
@@ -69,38 +85,20 @@ Thanks to the following developers for open-sourcing their own Diffbot client bi
   </ul>
 
 
-##Making Requests
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')s
-api.kittens.get()
-```
-
-```shell
-GET "http://api.diffbot.com/v3/analyze?token=demo&url=http%3A%2F%2Ftechcrunch.com%2F2012%2F05%2F31%2Fdiffbot-raises-2-million-seed-round-for-web-content-extraction-technology%2F"
-```
-
-`GET` requests have parameters provided in the querysting.
-
-
-
-<aside class="notice">Remember to [url-encode](http://en.wikipedia.org/wiki/Percent-encoding) all GET querystring parameters!</aside>
-
-
-
-###Support
-Popular questions and other help topics available at [http://support.diffbot.com](http://support.diffbot.com)
-
 
 ##Diffbot's APIs
+
+
+| API Name      | What it does                                                                                          |
+|-------------- |-----------------------------------------------------------------------------------------------------  |
+|  Article API  | For structuring articles and blog posts                                                               |
+|    Image API  | For extracting the primary images from pages                                                          |
+|  Product API  | For structuring e-commerce product pages                                                              |
+|  Analyze API  | Determines the page-type for any given URL (and routes it to the appropriate API, where applicable)   |
+| Custom APIs   | Custom field extraction from any site using manual rules                                              |
+| Crawlbot API  | For structuring entire sites using one of the above APIs                                              |
+| Bulk API      | Asynchronous processing of many URLs using one of the above APIs                                      |
+| Search API    | Realtime, field-specific search of your Crawlbot and Bulk API jobs      
 
 * [Article API]() For structuring articles and blog posts
 * [Image API]() For extracting the primary images from pages
