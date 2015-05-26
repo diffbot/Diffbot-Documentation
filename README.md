@@ -2,6 +2,14 @@ Diffbot Documentation
 ========
 **Note:** This is a work in progress! [Here are the latest docs](https://www.diffbot.com/dev/docs/)
 
+Suggesting Edits
+--------------------
+
+
+There's a separate markdown file for each API, [available here](https://github.com/diffbot/Diffbot-Documentation/tree/master/source/includes). Feel free to send a pull request if you notice something is amiss!  
+
+
+
 Getting Started with Slate
 ------------------------------
 
