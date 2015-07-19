@@ -3,6 +3,7 @@ title: Diffbot API Documentation
 
 language_tabs:
   - shell: cURL
+  - php: PHP
 
 toc_footers:
   - <a href='https://www.diffbot.com/plans/trial' target="_blank">Sign Up for a Developer Token</a>
@@ -13,6 +14,7 @@ toc_footers:
 
 includes:
   - introduction
+  - tutorials
   - authentication
   - analyze
   - article

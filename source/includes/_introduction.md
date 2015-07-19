@@ -1,18 +1,18 @@
-<h1 class="section-header">Introduction</h1>
+# Introduction
 
-Welcome to the Diffbot API Documention. Diffbot enables you to extract articles, products, images, videos, discussions, and more from any web page! 
+Welcome to the Diffbot API Documentation. Diffbot enables you to extract articles, products, images, videos, discussions, and more from any web page! 
 
-Using AI, computer vision, machine learning and natural language processing, Diffbot provides developers numerous tools to understand and extract data from any web page.
+Using AI, computer vision, machine learning and natural language processing, Diffbot provides developers with numerous tools to understand and extract data from any web page.
 
-We have sample code for you in Ruby and Python in the dark area to the right. cURL is shown by default, but you can use the tabs on the top right to switch the programming language. 
+We have sample code for you as raw cURL requests and in PHP in the dark area to the right - more languages (Ruby and Python being first) are coming soon. cURL is shown by default, but you can use the tabs in the top right to switch the programming language. 
 
-If you notice the docs are unclear or there's a typo, please don't be shy about clicking the "Suggest Edits" link! **We're working hard to keep these docs up to date**, however sometimes we get behind – and we'd love your help.
+If you notice the docs are unclear or that there's a typo, please don't be shy about clicking the "Suggest Edits" link in the left navbar! **We're working hard to keep these docs up to date**, however, sometimes we get behind – and we'd love your help.
 
 ##Helper Libraries
-* [Diffbot on Github](http://www.github.com/diffbot)
-* [All Libraries](http://www.github.com/diffbot)
 
-We commissioned and monitor the following libraries from our stellar group of community developers. All libraries are available via our [Github repository](https://github.com/diffbot).
+* [All Diffbot Libraries on Github](http://www.github.com/diffbot)
+
+We commissioned and monitor the following libraries from our stellar group of community developers. All libraries are available via our [Github repository](https://github.com/diffbot), but for convenience, here is the full list:
 
 <ul class="list-unstyled">
   <li>
@@ -46,7 +46,7 @@ We commissioned and monitor the following libraries from our stellar group of co
       <li><a target="_blank" href="https://github.com/diffbot/diffbot-ocaml-client">Ocaml</a></li>
       <li><a target="_blank" href="https://github.com/diffbot/diffbot-octave-client">Octave</a></li>
       <li><a target="_blank" href="https://github.com/diffbot/diffbot-perl-client">Perl</a></li>
-      <li><a target="_blank" href="https://github.com/diffbot/diffbot-php-client">PHP</a></li>
+      <li><a target="_blank" href="https://github.com/Swader/diffbot-php-client">PHP</a></li>
       <li><a target="_blank" href="https://github.com/diffbot/diffbot-plsql-client">PL/SQL</a></li>
       <li><a target="_blank" href="https://github.com/diffbot/diffbot-powershell-client">Powershell</a></li>
       <li><a target="_blank" href="https://github.com/diffbot/diffbot-prolog-client">Prolog</a></li>
@@ -82,6 +82,7 @@ Thanks to the following developers for open-sourcing their own Diffbot client bi
   <li><a href="https://rubygems.org/gems/diffbot" target="_new">Ruby</a> - by <a href="http://tinder.com" target="_new">Nicolas Sanguinetti</a></li>
   <li><a href="https://github.com/tevren/biffbot" target="_new">Ruby</a> - by <a href="https://github.com/tevren" target="_new">Anurag Mohanty</a></li>
   <li><a href="https://github.com/Laurent-Sarrazin/diffbot-php" target="_new">PHP</a> and <a href="https://github.com/Laurent-Sarrazin/LaurentSarrazinDiffbotBundle" target="_new">symfony</a> bundle by Laurent Sarrazin</li>
+  <li><a href="https://github.com/Swader/diffbot-php-client" target="_new">PHP</a> by <a href="https://twitter.com/bitfalls" target="_new">Bruno Skvorc</a></li>
   </ul>
 
 
@@ -89,24 +90,22 @@ Thanks to the following developers for open-sourcing their own Diffbot client bi
 ##Diffbot's APIs
 
 
-| API Name      | What it does                                                                                          |
-|-------------- |-----------------------------------------------------------------------------------------------------  |
-|  Article API  | For structuring articles and blog posts                                                               |
-|    Image API  | For extracting the primary images from pages                                                          |
-|  Product API  | For structuring e-commerce product pages                                                              |
-|  Analyze API  | Determines the page-type for any given URL (and routes it to the appropriate API, where applicable)   |
-| Custom APIs   | Custom field extraction from any site using manual rules                                              |
-| Crawlbot API  | For structuring entire sites using one of the above APIs                                              |
-| Bulk API      | Asynchronous processing of many URLs using one of the above APIs                                      |
-| Search API    | Realtime, field-specific search of your Crawlbot and Bulk API jobs      
+| API Name       | What it does                                                                                          |
+|----------------|-----------------------------------------------------------------------------------------------------  |
+| [Article API]  | For structuring articles and blog posts                                                               |
+| [Image API]    | For extracting the primary images from pages                                                          |
+| [Product API]  | For structuring e-commerce product pages                                                              |
+| [Analyze API]  | Determines the page-type for any given URL (and routes it to the appropriate API, where applicable)   |
+| [Custom APIs]  | Custom field extraction from any site using manual rules                                              |
+| [Crawlbot API] | For structuring entire sites using one of the above APIs                                              |
+| [Bulk API]     | Asynchronous processing of many URLs using one of the above APIs                                      |
+| [Search API]   | Real-time, field-specific search of your Crawlbot and Bulk API jobs      
 
-* [Article API]() For structuring articles and blog posts
-* [Image API]() For extracting the primary images from pages
-* [Product API]() For structuring e-commerce product pages
-* [Analyze API](#analyze-api) Determines the page-type for any given URL (and routes it to the appropriate API, where applicable)
-* [Custom APIs]() Custom field extraction from any site using manual rules
-* [Crawlbot API]() For structuring entire sites using one of the above APIs
-* [Bulk API]() Asynchronous processing of many URLs using one of the above APIs
-* [Search API]() Realtime, field-specific search of your Crawlbot and Bulk API jobs
-
-
+[Analyze API]: #analyze-api
+[Article API]: #article-api
+[Image API]: #image-api
+[Product API]: #product-api
+[Custom APIs]: #custom-api
+[Crawlbot API]: #crawlbot
+[Bulk API]: #bulk-processing
+[Search API]: #search-api

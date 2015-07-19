@@ -1,62 +1,99 @@
 # Analyze API
-The Diffbot Analyze API visually analyzes a web page, identifies its "page-type," and determines which Diffbot extraction API (if any) is appropriate. Pages that match a supported extraction API -- articles, discussions, images, products or videos -- will be automatically extracted and returned in the Analyze API response.
 
-Pages not currently supported by an extraction API will return "other."
+The Diffbot Analyze API visually analyzes a web page, identifies its "page-type", and determines which Diffbot extraction API (if any) is appropriate. Pages that match a supported extraction API - articles, discussions, images, products or videos - will be automatically extracted and returned in the Analyze API response.
+
+Pages not currently supported by an extraction API will return "other" as their type.
+
 ## Request
-
-
-> Example Request
 
 ```shell
 curl "http://api.diffbot.com/v3/analyze?token={token}&url=http%3A%2F%2Ftechcrunch.com%2F2012%2F05%2F31%2Fdiffbot-raises-2-million-seed-round-for-web-content-extraction-technology%2F"
 ```
 
-To use the Analyze API, perform a HTTP GET request on the following endpoint:
+```php
+<?php
+// you need the client library installed - https://github.com/swader/diffbot-php-client
+
+use \Swader\Diffbot\Diffbot;
+
+$diffbot = new Diffbot('my_token');
+$url = 'http://techcrunch.com/2012/05/31/diffbot-raises-2-million-seed-round-for-web-content-extraction-technology/';
+$analyzeApi = $diffbot->createAnalyzeAPI($url);
+
+$result = $analyzeApi->call();
+```
+
+
+To use the Analyze API, perform an HTTP GET request on the following endpoint:
 
 `GET http://api.diffbot.com/v3/analyze`
-<aside class="notice">Remember to url-encode all querystring parameters!</aside>
+<aside class="notice">Remember to url-encode all querystring parameters when using cURL! In all other instances, consult the client documentation - most of the good ones handle this for you.</aside>
 
+        
+        
+### Required Arguments
 
-<table class="controls table table-bordered" id="arguments" border="0" cellpadding="5">
-	<thead><tr><th>Argument</th><th>Description</th></tr></thead>
+```php
+<?php
 
-        <tbody><tr>
-            <td class="">token</td>
-            <td class=" default"><div>Developer token</div></td>
-        </tr>
-        <tr>
-            <td class="">url</td>
-            <td class=" default"><div>Web page URL of the analyze to process (URL encoded)</div></td>
-        </tr>
+$diffbot = new Diffbot('my_token');
+$url = 'http://techcrunch.com/2012/05/31/diffbot-raises-2-million-seed-round-for-web-content-extraction-technology/';
+$analyzeApi = $diffbot->createAnalyzeAPI($url);
+```
+        
+| Argument           | Description                                                                                                                                                                                                                                                                                                   |
+| ------------------ | --------------------- |
+| token              | Developer token   |
+| url                | Web page URL to process (URL encoded)      |
 
-        <tr>
-            <td colspan="2" class="header">Optional arguments</td>
-        </tr>
-        <tr>
-            <td class="">fields</td>
-            <td class=" optional"><div>Specify optional fields to be returned from any fully-extracted pages, e.g.: <code>&amp;fields=querystring,links</code>.<br><br>See available fields within each API's individual documentation pages.</div></td>
-        </tr>
-        <tr>
-            <td class="">mode</td>
-            <td class=" optional"><div>By default the Analyze API will fully extract all pages that match an existing Automatic API -- articles, products or image pages. Set <code>mode</code> to a specific page-type (e.g., <code>mode=article</code>) to extract content only from that specific page-type. All other pages will simply return the default Analyze fields.</div></td>
-        </tr>
-        <tr>
-            <td class="">discussion</td>
-            <td class=" optional"><div>Pass <code>discussion=false</code> to disable automatic extraction of comments or reviews from pages identified as articles or products. This will not affect pages identified as discussions.</div></td>
-        </tr>
-        <tr>
-            <td class="">timeout</td>
-            <td class=" optional"><div>Set a value in milliseconds to terminate the response. By default the Analyze API has a 30-second (30000) timeout.</div></td>
-        </tr>
-        <tr>
-            <td class="">callback</td>
-            <td class=" optional"><div>Use for jsonp requests. Needed for cross-domain ajax.</div></td>
-        </tr></tbody></table>
+### Optional Arguments
 
-## Response 
+```php
+<?php
 
+$analyzeApi->setMeta(true);
+ 
+// setters can also be chained
 
-> If successful, you'll receive this response:
+$analyzeApi
+            ->setBreadcrumb(true)
+            ->setQuerystring(true)
+            ->setLinks(true);
+            
+$analyzeApi
+            ->setDiscussion(false)
+            ->setTimeout(30000)
+            ->setMode('article');
+```
+
+```shell
+curl 'http://api.diffbot.com/v3/analyze?token={token}&url=http%3A%2F%2Fwww.sitepoint.com%2Fdiffbot-crawling-visual-machine-learning&fields=meta,links,breadcrumb,querystring&discussion=false'
+```
+
+| Argument           | Description                   |
+| ------------------ | --------------------- |
+| fields             | Specify optional fields to be returned from any fully-extracted pages, e.g.: `&fields=querystring,links`. See available fields within each API's individual documentation pages, under the relevant Response section.                                                                                                                                 |
+| mode               | By default, the Analyze API will fully extract all pages that match an existing Automatic API -- articles, products or image pages. Set `mode` to a specific page-type (e.g., `mode=article`) to extract content only from that specific page-type. All other pages will simply return the default Analyze fields. |
+| discussion         | Pass `discussion=false` to disable automatic extraction of comments or reviews from pages identified as articles or products. This will not affect pages identified as discussions. Also see [Discussion API](#discussion-api).                                                                                                                             |
+| timeout            | Set a value in milliseconds to terminate the response. By default, the Analyze API has a 30-second (30000) timeout.                                                                                                                                                                                            |
+| callback           | Use for jsonp requests. Needed for cross-domain ajax.                                                                                                                                                                                                                                                         |
+
+## Response
+
+```php
+<?php
+
+echo $result->author; // prints out "Sarah Perez"
+echo $result->type; // prints out "article"
+
+// or, get the whole json dump with
+$dump = $result->getResponse()->getBody();
+
+// or as a PHP array
+$dump = $result->getResponse()->json();
+```
+
+> The full json dump will look something like this:
 
 ```json
 {
@@ -136,53 +173,26 @@ To use the Analyze API, perform a HTTP GET request on the following endpoint:
 }
 ```
 
-Each V3 response includes a request object (which returns request-specific metadata), and an objects array, which will include the extracted information for all objects on a submitted page.
+Each V3 JSON response includes a request object (which returns request-specific metadata), and an objects array, which will include the extracted information for all objects on a submitted page.
 
 If the Analyze API identifies the submitted page as an article, discussion thread, product or image, the associated object(s) from the page will be returned automatically in the objects array.
 
+Different clients have different accessors for the different fields and values, so refer to their documentation or IDE code hints for details. E.g. the [the PHP client](https://github.com/swader/diffbot-php-client) is fully object oriented as can be seen [here](http://www.sitepoint.com/crawling-searching-entire-domains-diffbot/) and in the code examples to the right.
+
 The default fields returned:
+       
+| Field                                             | Description  |
+| ------------------------------------------------- | ------------------------------------------------------------------- |
+| title                                             | Title of the page.   |
+| type                                              | Page-type of the submitted URL, either article, image, product, discussion, or other.                        |
+| humanLanguage                                     | Returns the (spoken/human) language of the submitted page, using two-letter <a href="http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank">ISO 639-1 nomenclature</a>.                 |
 
-<table class="controls table table-bordered" id="fields" border="0" cellpadding="5">
-	<thead><tr><th>Field</th><th>Description</th></tr></thead>
-
-        <tbody><tr>
-            <td class="">title</td>
-            <td class=" default"><div>Title of the page.</div></td>
-        </tr>
-        <tr>
-            <td class="">type</td>
-            <td class=" default"><div>Page-type of the submitted URL, either <code>article</code>, <code>image</code>, <code>product</code> or <code>other</code>.</div></td>
-        </tr>
-        <tr>
-            <td class="">humanLanguage</td>
-            <td class=" default"><div>Returns the (spoken/human) language of the submitted page, using two-letter <a href="http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank">ISO 639-1 nomenclature</a>.</div></td>
-        </tr>
-
-        <tr>
-            <td colspan="2" class="header">Optional fields, available using <code>fields=</code> argument</td>
-        </tr>
-        <tr>
-            <td class="">links</td>
-            <td class=" optional"><div>Returns a top-level object (<code>links</code>) containing all hyperlinks found on the page.</div></td>
-        </tr>
-        <tr>
-            <td class="">meta</td>
-            <td class=" optional"><div>Returns a top-level object (<code>meta</code>) containing the full contents of page <code>meta</code> tags, including sub-arrays for <a href="http://ogp.me/" target="_new">OpenGraph</a> tags, <a href="https://dev.twitter.com/docs/cards/markup-reference" target="_new">Twitter Card</a> metadata, <a href="http://www.schema.org" target="_new">schema.org</a> microdata, and -- if available -- <a href="http://www.oembed.com" target="_new">oEmbed</a> metadata.</div></td>
-        </tr>
-        <tr>
-            <td class="">querystring</td>
-            <td class=" optional"><div>Returns any key/value pairs present in the URL querystring. Items without a discrete value will be returned as <code>true</code>.</div></td>
-        </tr>
-        <tr>
-            <td class="">breadcrumb</td>
-            <td class=" optional"><div>Returns a top-level array (<code>breadcrumb</code>) of URLs and link text from page breadcrumbs.</div></td>
-        </tr></tbody></table>
-
-
-<aside class="success">
-Remember — a happy robot is an authenticated robot!
-</aside>
-
+| Optional fields, available using the fields= argument |  Description              |
+| ------------------------------------------------- | ---------------------------------------------------- |
+| links                                             | Returns a top-level object (links) containing all hyperlinks found on the page.  |
+| meta                                              | Returns a top-level object (meta) containing the full contents of page meta tags, including sub-arrays for <a href="http://ogp.me/" target="_new">OpenGraph</a> tags, <a href="https://dev.twitter.com/docs/cards/markup-reference" target="_new">Twitter Card</a> metadata, <a href="http://www.schema.org" target="_new">schema.org</a> microdata, and -- if available -- <a href="http://www.oembed.com" target="_new">oEmbed</a> metadata. |
+| querystring                                       | Returns any key/value pairs present in the URL querystring. Items without a discrete value will be returned as true.                                                                                            |
+| breadcrumb                                        | Returns a top-level array (breadcrumb) of URLs and link text from page breadcrumbs.   |       
 
 ## Options
 
@@ -195,7 +205,7 @@ To access pages that require a login/password ([using basic access authenticatio
 
 ### Custom HTTP Headers
 
-You can supply Diffbot APIs with custom values for the user-agent, referer, cookie, or accept-language values in the HTTP request. These will be used in place of the Diffbot default values.
+You can supply Diffbot APIs with custom values for the user-agent, _referer_, cookie, or accept-language values in the HTTP request. These will be used in place of the Diffbot default values.
 
 To provide custom headers, pass in the following values in your own headers when calling the Diffbot API:
 
