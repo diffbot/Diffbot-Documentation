@@ -1,0 +1,7 @@
+|||
+| `type`              | Type of object (always `<%= object %>`).    |
+| `pageUrl`           | URL of submitted page / page from which the <%= object %> is extracted.   |
+| <nobr>`resolvedPageUrl`</nobr>   | Returned if the `pageUrl` redirects to another URL.                   |
+| `title`             | Title of the <%= object %>.               |
+| `humanLanguage`     | Returns the (spoken/human) language of the submitted page, using two-letter [ISO 639-1 nomenclature](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes). |
+| `diffbotUri`        | Unique object ID. The `diffbotUri` is generated from the values of various <%= object.capitalize %> fields and uniquely identifies the object. This can be used for deduplication.                 |

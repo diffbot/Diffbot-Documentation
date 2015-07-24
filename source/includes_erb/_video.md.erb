@@ -1,0 +1,159 @@
+# Video API
+The Video API automatically extracts detailed video information — including most metadata, thumbnail images, direct video URL and embed code — from nearly any video page or video platform on the web.
+
+<aside class="warning">Note: this API is in beta</aside>
+
+## Request
+
+```shell
+curl "http://api.diffbot.com/v3/video?token={token}&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DVNv3EZEUgok"
+```
+
+<%= partial("includes_erb/partials/to_use_api", :locals => { :api => "video" }) %>
+
+### Required Arguments
+
+```php
+<?php
+
+$diffbot = new Diffbot('my_token');
+$url = 'https://www.youtube.com/watch?v=VNv3EZEUgok';
+$videoApi = $diffbot->createVideoApi($url);
+```
+
+<%= partial "includes_erb/partials/table_required_arguments" %>
+
+### Optional Arguments
+```php
+<?php
+
+$videoApi->setMeta(true);
+ 
+// setters can also be chained
+
+$videoApi
+            ->setBreadcrumb(true)
+            ->setQuerystring(true)
+            ->setLinks(true);
+            
+$videoApi
+            ->setTimeout(30000);
+```
+
+
+| Argument           | Description    |
+| ------------------ | --------------------------------------------------------------- |<%= partial "includes_erb/partials/table_common_optional_arguments" %>| 
+       
+<%= partial("includes_erb/partials/fields", :locals => {:table => "response58"}) %>
+
+
+## Response 
+
+> Example: processing the link https://www.youtube.com/watch?v=VNv3EZEUgok
+
+```php
+<?php
+
+echo $result->title; // prints out "Create a Custom API Using Diffbot's Custom API Toolkit"
+echo $result->duration; // prints out 343
+
+// or, get the whole json dump with
+$dump = $result->getResponse()->getBody();
+
+// or as a PHP array
+$dump = $result->getResponse()->json();
+```
+
+```shell
+curl 'http://api.diffbot.com/v3/image?token={token}&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DVNv3EZEUgok'
+```
+
+
+> The full json dump will look something like this:
+
+```json
+{
+    "request": {
+        "pageUrl": "https://www.youtube.com/watch?v=VNv3EZEUgok",
+        "api": "video",
+        "version": 3,
+        "options": [
+            "mentos"
+        ]
+    },
+    "objects": [
+        {
+            "text": "This demonstration shows how to create a completely custom API using Diffbot's Custom API Toolkit. In it we show how to extract the \"What's Hot\" / Trending links from http://www.mashable.com.",
+            "pageUrl": "https://www.youtube.com/watch?v=VNv3EZEUgok",
+            "naturalHeight": 720,
+            "humanLanguage": "en",
+            "date": "Fri, 02 Aug 2013 07:00:00 GMT",
+            "type": "video",
+            "url": "https://r17---sn-tt17dne7.googlevideo.com/videoplayback?ipbits=0&ratebypass=yes&ip=130.211.139.90&mm=31&itag=22&sver=3&ms=au&mt=1437696699&mn=sn-tt17dne7&mv=m&id=o-ADeTQWa8Npc5rWCUQHmp9fxMdTxcP-4J5321K47inpcO&dur=342.378&lmt=1375464326138667&pl=24&upn=90K3jxcMG4g&expire=1437718345&source=youtube&mime=video%2Fmp4&key=yt5&fexp=901816%2C9408710%2C9414764%2C9416126&requiressl=yes&sparams=dur%2Cid%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cupn%2Cexpire&signature=C080467255D18DF62EAFE8347A4FEDA7EC7849.E2937C5A2A2AA06CBD9E723F50E8DC151E6DE8",
+            "author": "Diffbot",
+            "title": "Create a Custom API Using Diffbot's Custom API Toolkit",
+            "duration": 343,
+            "diffbotUri": "video|3|1201860854",
+            "images": [
+                {
+                    "title": "Create a Custom API Using Diffbot's Custom API Toolkit",
+                    "url": "https://i.ytimg.com/vi/VNv3EZEUgok/hqdefault.jpg"
+                }
+            ],
+            "html": "<video controls><source src=\"https://r17---sn-tt17dne7.googlevideo.com/videoplayback?ipbits=0&ratebypass=yes&ip=130.211.139.90&mm=31&itag=22&sver=3&ms=au&mt=1437696699&mn=sn-tt17dne7&mv=m&id=o-ADeTQWa8Npc5rWCUQHmp9fxMdTxcP-4J5321K47inpcO&dur=342.378&lmt=1375464326138667&pl=24&upn=90K3jxcMG4g&expire=1437718345&source=youtube&mime=video%2Fmp4&key=yt5&fexp=901816%2C9408710%2C9414764%2C9416126&requiressl=yes&sparams=dur%2Cid%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cupn%2Cexpire&signature=C080467255D18DF62EAFE8347A4FEDA7EC7849.E2937C5A2A2AA06CBD9E723F50E8DC151E6DE8\" type=\"video/mp4\"><\\/video><p>This demonstration shows how to create a completely custom API using Diffbot's Custom API Toolkit. In it we show how to extract the \"What's Hot\" / Trending links from http://www.mashable.com.<\\/p>",
+            "mime": "video/mp4",
+            "naturalWidth": 1280,
+            "viewCount": 1847
+        }
+    ]
+}
+```
+
+
+
+Diffbot's V3 APIs return information about **all** identified objects on a submitted page.
+
+<%= partial "includes_erb/partials/each_response_intro" %>
+
+Objects in the Video API's `objects` array will include the following:
+
+**Default Fields**
+
+| Field       | Description       |
+| ------------------------------------------------- | ---------- |<%= partial("includes_erb/partials/table_common_default_fields", :locals => {:object => "image"}) %>| `text`        | Text description, if available, of the video.           |
+| `url`         | Direct link to source video file, if available.         |
+| `html`        | Embeddable HTML of the video (if available), typically an `IFRAME` or `VIDEO` object.             |
+| `embedUrl`    | Embeddable URL, if available.        |
+| `author`      | Video uploader or creator, if available.                |
+| `date`        | Date of extracted video, normalized in most cases to [RFC 1123 (HTTP/1.1)](http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3).  |
+| `duration`    | Duration in seconds of the Video.    |
+| `viewCount`   | Number of Video views, if available on the page.        |
+| `naturalHeight` | Raw video height, if available, in pixels.              |
+| `naturalWidth` | Raw video width, if available, in pixels.               |
+| `images`      | Array of images, if present within the video.           |
+| `images.url`         | Fully resolved link to image. If the image SRC is encoded as base64 data, the complete data `URI` will be returned.       |
+| `images.title`         | Description or caption of the image.       |
+| `mime`        | MIME type, if available, as specified by the Video's "Content-Type."       |
+
+---
+
+**Optional fields, available using the `&fields=` argument**
+
+| Field       | Description       |
+| ------------------------------------------------- | ---------- |<%= partial "includes_erb/partials/table_optional_fields" %>
+
+## Options
+
+<%= partial "includes_erb/partials/auth" %>
+
+<%= partial "includes_erb/partials/custom_http_headers" %>
+
+### Posting Content
+
+If your content is not publicly available (e.g., behind a firewall), you can POST markup directly to the Video API endpoint for analysis:
+
+`http://api.diffbot.com/v3/video?token={token}&url={url}`
+
+Please note that the `url` argument is still required, and will be used to resolve any relative links contained in the markup.
+
+Provide the content to analyze as your POST body, and specify the `Content-Type` header as `text/html`.

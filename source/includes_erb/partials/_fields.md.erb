@@ -1,0 +1,11 @@
+### The Fields Argument
+
+Use the `fields` argument to return optional fields in the JSON response. The default fields will always be returned (see [table below](#<%= table %>)). 
+
+For example, to return `links` and `meta` (in addition to the default fields), your `&fields` argument would be:
+
+`&fields=links,meta`
+
+For nested arrays, use parentheses to retrieve specific fields, or * to return all sub-fields. For example, if the field `tags` were optional, you could tell Diffbot to only return `uri` sub-fields with `&fields=tags(uri)`.
+
+Note that most clients will abstract this into setters or something equally simple to use (see `PHP` example to the right).
