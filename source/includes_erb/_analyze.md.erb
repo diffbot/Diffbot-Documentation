@@ -23,13 +23,8 @@ $analyzeApi = $diffbot->createAnalyzeAPI($url);
 $result = $analyzeApi->call();
 ```
 
-
-To use the Analyze API, perform an HTTP GET request on the following endpoint:
-
-`GET http://api.diffbot.com/v3/analyze`
-<aside class="notice">Remember to url-encode all querystring parameters when using cURL! In all other instances, consult the client documentation - most of the good ones handle this for you.</aside>
-
-        
+<%= partial("includes_erb/partials/to_use_api", :locals => { :api => "analyze" }) %>
+       
         
 ### Required Arguments
 
@@ -41,10 +36,7 @@ $url = 'http://techcrunch.com/2012/05/31/diffbot-raises-2-million-seed-round-for
 $analyzeApi = $diffbot->createAnalyzeAPI($url);
 ```
         
-| Argument           | Description                                                                                                                                                                                                                                                                                                   |
-| ------------------ | --------------------- |
-| token              | Developer token   |
-| url                | Web page URL to process (URL encoded)      |
+<%= partial "includes_erb/partials/table_required_arguments" %>
 
 ### Optional Arguments
 
@@ -71,12 +63,8 @@ curl 'http://api.diffbot.com/v3/analyze?token={token}&url=http%3A%2F%2Fwww.sitep
 ```
 
 | Argument           | Description                   |
-| ------------------ | --------------------- |
-| fields             | Specify optional fields to be returned from any fully-extracted pages, e.g.: `&fields=querystring,links`. See available fields within each API's individual documentation pages, under the relevant Response section.                                                                                                                                 |
-| mode               | By default, the Analyze API will fully extract all pages that match an existing Automatic API -- articles, products or image pages. Set `mode` to a specific page-type (e.g., `mode=article`) to extract content only from that specific page-type. All other pages will simply return the default Analyze fields. |
-| discussion         | Pass `discussion=false` to disable automatic extraction of comments or reviews from pages identified as articles or products. This will not affect pages identified as discussions. Also see [Discussion API](#discussion-api).                                                                                                                             |
-| timeout            | Set a value in milliseconds to terminate the response. By default, the Analyze API has a 30-second (30000) timeout.                                                                                                                                                                                            |
-| callback           | Use for jsonp requests. Needed for cross-domain ajax.                                                                                                                                                                                                                                                         |
+| ------------------ | --------------------- |<%= partial "includes_erb/partials/table_common_optional_arguments" %>| `mode`               | By default, the Analyze API will fully extract all pages that match an existing Automatic API -- articles, products or image pages. Set `mode` to a specific page-type (e.g., `mode=article`) to extract content only from that specific page-type. All other pages will simply return the default Analyze fields. |
+| <nobr>`discussion`</nobr>         | Pass `discussion=false` to disable automatic extraction of comments or reviews from pages identified as articles or products. This will not affect pages identified as discussions. Also see [Discussion API](#discussion-api).                                                                                                                             ||
 
 ## Response
 
@@ -173,45 +161,31 @@ $dump = $result->getResponse()->json();
 }
 ```
 
-Each V3 JSON response includes a request object (which returns request-specific metadata), and an objects array, which will include the extracted information for all objects on a submitted page.
+<%= partial "includes_erb/partials/each_response_intro" %>
 
 If the Analyze API identifies the submitted page as an article, discussion thread, product or image, the associated object(s) from the page will be returned automatically in the objects array.
 
 Different clients have different accessors for the different fields and values, so refer to their documentation or IDE code hints for details. E.g. the [the PHP client](https://github.com/swader/diffbot-php-client) is fully object oriented as can be seen [here](http://www.sitepoint.com/crawling-searching-entire-domains-diffbot/) and in the code examples to the right.
 
-The default fields returned:
+The Discussion API will return the following:
+
+**Default Fields**
        
 | Field                                             | Description  |
 | ------------------------------------------------- | ------------------------------------------------------------------- |
-| title                                             | Title of the page.   |
-| type                                              | Page-type of the submitted URL, either article, image, product, discussion, or other.                        |
-| humanLanguage                                     | Returns the (spoken/human) language of the submitted page, using two-letter <a href="http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank">ISO 639-1 nomenclature</a>.                 |
+| `title`                                             | Title of the page.   |
+| `type`                                              | Page-type of the submitted URL, either article, image, product, discussion, or other.                        |
+| <nobr>`humanLanguage`</nobr>                                     | Returns the (spoken/human) language of the submitted page, using two-letter <a href="http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank">ISO 639-1 nomenclature</a>.                 |
 
-| Optional fields, available using the `&fields=` argument |  Description              |
-| ------------------------------------------------- | ---------------------------------------------------- |
-| links                                             | Returns a top-level object (links) containing all hyperlinks found on the page.  |
-| meta                                              | Returns a top-level object (meta) containing the full contents of page meta tags, including sub-arrays for <a href="http://ogp.me/" target="_new">OpenGraph</a> tags, <a href="https://dev.twitter.com/docs/cards/markup-reference" target="_new">Twitter Card</a> metadata, <a href="http://www.schema.org" target="_new">schema.org</a> microdata, and -- if available -- <a href="http://www.oembed.com" target="_new">oEmbed</a> metadata. |
-| querystring                                       | Returns any key/value pairs present in the URL querystring. Items without a discrete value will be returned as true.                                                                                            |
-| breadcrumb                                        | Returns a top-level array (breadcrumb) of URLs and link text from page breadcrumbs.   |       
+---
+
+**Optional fields, available using the `&fields=` argument**
+
+| Field |  Description              |
+| ------------------------------------------------- | ---------------------------------------------------- |<%= partial "includes_erb/partials/table_optional_fields" %>
 
 ## Options
 
-### Authentication
+<%= partial "includes_erb/partials/auth" %>
 
-You can supply Diffbot with basic authentication credentials or custom HTTP headers (see below) to access intranet pages or other sites that require a login.
-
-### Basic Authentication
-To access pages that require a login/password ([using basic access authentication](http://en.wikipedia.org/wiki/Basic_access_authentication)), include the username and password in your `url` parameter, e.g.: `url=http%3A%2F%2FUSERNAME:PASSWORD@www.diffbot.com`.
-
-### Custom HTTP Headers
-
-You can supply Diffbot APIs with custom values for the user-agent, _referer_, cookie, or accept-language values in the HTTP request. These will be used in place of the Diffbot default values.
-
-To provide custom headers, pass in the following values in your own headers when calling the Diffbot API:
-
-Header | Description
---------- | -----------
-X-Forward-User-Agent | Will be used as Diffbot's `User-Agent` header when making your request.
-X-Forward-Referer	| Will be used as Diffbot's `Referer` header when making your request.
-X-Forward-Cookie | Will be used as Diffbot's `Cookie` header when making your request.
-X-Forward-Accept-Language | Will be used as Diffbot's `Accept-Language` header when making your request.
+<%= partial "includes_erb/partials/custom_http_headers" %>

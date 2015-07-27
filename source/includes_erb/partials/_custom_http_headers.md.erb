@@ -1,0 +1,12 @@
+### Custom HTTP Headers
+
+You can supply Diffbot APIs with custom values for the user-agent, _referer_, cookie, or accept-language values in the HTTP request. These will be used in place of the Diffbot default values.
+
+To provide custom headers, pass in the following values in your own headers when calling the Diffbot API:
+
+Header | Description
+--------- | -----------
+X-Forward-User-Agent | Will be used as Diffbot's `User-Agent` header when making your request.
+X-Forward-Referer | Will be used as Diffbot's `Referer` header when making your request.
+X-Forward-Cookie | Will be used as Diffbot's `Cookie` header when making your request.
+X-Forward-Accept-Language | Will be used as Diffbot's `Accept-Language` header when making your request.

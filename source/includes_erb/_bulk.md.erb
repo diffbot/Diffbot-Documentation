@@ -1,0 +1,58 @@
+# Bulk Processing
+
+Diffbot's Bulk Processor lets you send a large quantity of URLs through a Diffbot extraction API for fast, asynchronous processing.
+
+<aside class="info">
+ <strong>Related:</strong> <a href="http://support.diffbot.com/topics/bulk-api-service/" target="_blank">Bulk Processing Support</a> | <a href="#bulk-api">Bulk API Documentation</a>
+</aside>
+
+## Overview
+
+The Bulk Processor sends all submitted page URLs to a Diffbot API (either automatic or custom). All structured page results are then compiled into a single "collection," which can be downloaded in full or searched using the [Search API](#search-api).
+
+<aside>
+  <strong>Note:</strong> The Bulk Processor is not a crawler: it does not spider a site for additional links. You must supply each URL you wish to process. For crawling/spidering, see <a href="/dev/docs/crawl">Crawlbot</a>.
+</aside>
+
+### Creating a Bulk Job
+
+Each bulk job requires the following:
+
+1. A name (e.g., "NewProducts").
+2. One or more URLs to process, one per line.
+3. A Diffbot API to be used for processing pages.
+
+
+
+<img title="Extracting all of the articles from support.diffbot.com" alt="Creating a Bulk Job" src="images/bulk.png">
+Extracting all of the articles from [support.diffbot.com](http://support.diffbot.com).
+
+
+
+### Passing Diffbot API Querystring Arguments
+
+The Bulk Processor hands off URLs to [specific Diffbot APIs](#diffbot's-apis) for processing. Each of these APIs has optional querystring arguments that can be used to modify the information returned -- most commonly the fields argument, for adding optional `fields` to the Diffbot response.
+<aside>
+  <strong>Note:</strong> Top-level fields in our V3 APIs (e.g., <code>links</code> or <code>meta</code>) will not be indexed or captured in bulk jobs. If you need these fields indexed, please use our V2 APIs (available via the API dropdown menu).
+
+</aside>
+
+
+### Notifications
+
+You can choose to be notified at the conclusion of each bulk job, either by [webhook](http://en.wikipedia.org/wiki/Webhook) or email.
+
+If "webhook" is chosen, you will need to supply a URL that is capable of receiving a POST request. One alternative to building your own: use the Diffbot app on [Zapier](https://zapier.com/zapbook/diffbot/) to receive webhook notifications.
+
+### Accessing Bulk Job Data
+
+<aside>
+  Completed or paused bulk jobs will be automatically deleted after thirty days. Unlimited storage and searching is available with the <a href="http://www.diffbot.com/pricing">Pro plan</a>.
+</aside>
+
+You can access processed data anytime during your bulk job, or after it completes. There are two download options within the interface:
+
+1. Full JSON Output: A single file, in valid [JSON](http://en.wikipedia.org/wiki/JSON), containing all of the processed objects from your job.
+1. CSV Output: A single comma-separated-values file of the **top-level** objects. Nested elements (article images, tags, etc.) will not be returned in the CSV.
+
+If you only want to access a subset of your data, the [Search API](#search-api) allows much more flexibility in searching and retrieving only the matching items from queries.
