@@ -11,7 +11,7 @@ Diffbot's Bulk Processor lets you send a large quantity of URLs through a Diffbo
 The Bulk Processor sends all submitted page URLs to a Diffbot API (either automatic or custom). All structured page results are then compiled into a single "collection," which can be downloaded in full or searched using the [Search API](#search-api).
 
 <aside>
-  <strong>Note:</strong> The Bulk Processor is not a crawler: it does not spider a site for additional links. You must supply each URL you wish to process. For crawling/spidering, see <a href="/dev/docs/crawl">Crawlbot</a>.
+  <strong>Note:</strong> The Bulk Processor is not a crawler: it does not spider a site for additional links. You must supply each URL you wish to process. For crawling/spidering, see <a href="#crawlbot">Crawlbot</a>.
 </aside>
 
 ### Creating a Bulk Job
@@ -22,12 +22,7 @@ Each bulk job requires the following:
 2. One or more URLs to process, one per line.
 3. A Diffbot API to be used for processing pages.
 
-
-
-<img title="Extracting all of the articles from support.diffbot.com" alt="Creating a Bulk Job" src="images/bulk.png">
-Extracting all of the articles from [support.diffbot.com](http://support.diffbot.com).
-
-
+![Extracting all of the articles from support.diffbot.com](images/bulk.png)
 
 ### Passing Diffbot API Querystring Arguments
 

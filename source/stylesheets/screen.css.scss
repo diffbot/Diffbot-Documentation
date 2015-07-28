@@ -5,7 +5,6 @@
 @import 'syntax';
 @import 'icon-font';
 
-
 /*
 Copyright 2008-2013 Concur Technologies, Inc.
 
@@ -51,19 +50,19 @@ html, body {
 
 @mixin embossed-bg {
   @include background(
-    linear-gradient(top,
-                    rgba(#000, 0.2),
-                    rgba(#000, 0) 8px),
-    linear-gradient(bottom,
-                    rgba(#000, 0.2),
-                    rgba(#000, 0) 8px),
-    linear-gradient(top,
-                    rgba($nav-embossed-border-top, 1),
-                    rgba($nav-embossed-border-top, 0) 1.5px),
-    linear-gradient(bottom,
-                    rgba($nav-embossed-border-bottom, 1),
-                    rgba($nav-embossed-border-bottom, 0) 1.5px),
-    $nav-subitem-bg
+          linear-gradient(top,
+                  rgba(#000, 0.2),
+                  rgba(#000, 0) 8px),
+          linear-gradient(bottom,
+                  rgba(#000, 0.2),
+                  rgba(#000, 0) 8px),
+          linear-gradient(top,
+                  rgba($nav-embossed-border-top, 1),
+                  rgba($nav-embossed-border-top, 0) 1.5px),
+          linear-gradient(bottom,
+                  rgba($nav-embossed-border-bottom, 1),
+                  rgba($nav-embossed-border-bottom, 0) 1.5px),
+          $nav-subitem-bg
   );
 }
 
@@ -91,11 +90,11 @@ html, body {
   }
 
   // This is the logo at the top of the ToC
-  &>img {
+  & > img {
     display: block;
   }
 
-  &>.search {
+  & > .search {
     position: relative;
 
     input {
@@ -120,7 +119,7 @@ html, body {
     }
   }
 
-  img+.tocify {
+  img + .tocify {
     margin-top: $logo-margin;
   }
 
@@ -140,7 +139,6 @@ html, body {
 
     // @include embossed-bg;
     background-color: darken($nav-subitem-bg, 2%);
-    
 
     li {
       margin: 1em $nav-padding;
@@ -157,8 +155,7 @@ html, body {
     }
   }
 
-
-  .tocify-item>a, .toc-footer li {
+  .tocify-item > a, .toc-footer li {
     padding: 0 $nav-padding 0 $nav-padding;
     display: block;
     overflow-x: hidden;
@@ -196,7 +193,7 @@ html, body {
     display: none; // tocify will override this when needed
     background-color: darken($nav-subitem-bg, 2%);
     font-weight: 500;
-    .tocify-item>a {
+    .tocify-item > a {
       padding-left: $nav-padding + $nav-indent;
       font-size: 12px;
       &:hover {
@@ -211,7 +208,7 @@ html, body {
     margin-top: 1em;
     border-top: 1px dashed $nav-footer-border-color;
 
-    li,a {
+    li, a {
       color: $nav-text;
       text-decoration: none;
     }
@@ -259,10 +256,13 @@ html, body {
 
   @include transition(left ease-in-out 0.3s);
 
-  &:hover { opacity: 1; }
-  &.open {left: $nav-width}
+  &:hover {
+    opacity: 1;
+  }
+  &.open {
+    left: $nav-width
+  }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // PAGE LAYOUT AND CODE SAMPLE BACKGROUND
@@ -304,13 +304,13 @@ html, body {
   font-weight: bold;
   a {
     display: block;
-    float:left;
+    float: left;
     color: $lang-select-text;
     text-decoration: none;
-//    padding: 0 40px;
-		padding: 0 10px;
-//    line-height: 69px;
-		line-height: 30px;
+    //    padding: 0 40px;
+    padding: 0 10px;
+    //    line-height: 69px;
+    line-height: 30px;
     outline: 0;
 
     &:active, &:focus {
@@ -347,7 +347,7 @@ html, body {
     clear: both;
   }
 
-  &>h1, &>h2, &>h3, &>h4, &>h5, &>h6, &>p, &>table, &>ul, &>ol, &>aside, &>dl {
+  & > h1, & > h2, & > h3, & > h4, & > h5, & > h6, & > p, & > table, & > ul, & > ol, & > aside, & > dl {
     margin-right: $examples-width;
     padding: 0 $main-padding;
     @include box-sizing(border-box);
@@ -357,13 +357,13 @@ html, body {
     @extend %left-col;
   }
 
-  &>ul, &>ol {
+  & > ul, & > ol {
     padding-left: $main-padding + 15px;
   }
 
   // the div is the tocify hidden div for placeholding stuff
-  &>h1, &>h2, &>div {
-    clear:both;
+  & > h1, & > h2, & > div {
+    clear: both;
   }
 
   h1 {
@@ -395,7 +395,7 @@ html, body {
     padding-top: 1.2em;
     padding-bottom: 1.2em;
     @include background-image(
-      linear-gradient(top, rgba(#fff,0.4), rgba(#fff, 0))
+            linear-gradient(top, rgba(#fff, 0.4), rgba(#fff, 0))
     );
   }
 
@@ -406,7 +406,6 @@ html, body {
     border-top: none;
   }
 
- 
   h3, h4, h5, h6 {
     @extend %header-font;
     font-size: 14px;
@@ -428,7 +427,7 @@ html, body {
   table {
     margin-bottom: 1em;
     overflow: auto;
-    th,td {
+    th, td {
       text-align: left;
       vertical-align: top;
       line-height: 1.6;
@@ -448,13 +447,18 @@ html, body {
       border-bottom: 1px solid #ccc;
     }
 
-    tr:nth-child(odd)>td {
-      background-color: lighten($main-bg,4.2%);
+    tr:nth-child(odd) > td {
+      background-color: lighten($main-bg, 4.2%);
     }
 
-    tr:nth-child(even)>td {
-      background-color: lighten($main-bg,2.4%);
+    tr:nth-child(even) > td {
+      background-color: darken($main-bg, 2.4%);
     }
+
+    tr:hover > td {
+      background-color: darken($main-bg, 7.4%);
+    }
+
   }
 
   dt {
@@ -475,14 +479,14 @@ html, body {
   }
 
   code {
-    background-color: rgba(0,0,0,0.05);
+    background-color: rgba(0, 0, 0, 0.05);
     padding: 3px;
     border-radius: 3px;
     @extend %break-words;
     @extend %code-font;
   }
 
-  pre>code {
+  pre > code {
     background-color: transparent;
     padding: 0;
   }
@@ -549,15 +553,17 @@ html, body {
     margin: 0;
     width: $examples-width;
 
-    float:right;
-    clear:right;
+    float: right;
+    clear: right;
 
     @include box-sizing(border-box);
-    @include text-shadow(0px 1px 2px rgba(0,0,0,0.4));
+    @include text-shadow(0px 1px 2px rgba(0, 0, 0, 0.4));
 
     @extend %right-col;
 
-    &>p { margin: 0; }
+    & > p {
+      margin: 0;
+    }
 
     a {
       color: #fff;
@@ -571,7 +577,7 @@ html, body {
   }
 
   blockquote {
-    &>p {
+    & > p {
       background-color: $code-annotation-bg;
       border-radius: 5px;
       padding: $code-annotation-padding;
@@ -582,10 +588,7 @@ html, body {
   }
 }
 
-
 @import 'custom';
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // RESPONSIVE DESIGN

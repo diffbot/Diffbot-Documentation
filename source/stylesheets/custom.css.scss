@@ -152,8 +152,6 @@
   }
 }
 
-
-
 .content table td {
   text-align: right;
   &.default, &.optional {
@@ -190,7 +188,9 @@
   
 }
 
-
+span.fadedSpan {
+  color: #888;
+}
 
 // .video-container {
 //   position:relative;
