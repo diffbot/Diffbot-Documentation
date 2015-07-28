@@ -8,7 +8,7 @@ Crawlbot allows you to apply a Diffbot API to entire sites, returning the comple
 
 ## Overview
 
-Crawlbot works hand-in-hand with a Diffbot API (either automatic or custom). It quickly spiders a site for appropriate links and hands these links to a Diffbot API for processing. All structured page results are then compiled into a single "collection," which can be downloaded in full or searched using the [Search API](#search-api).
+Crawlbot works hand-in-hand with a Diffbot API (either automatic or custom). It quickly spiders a site for appropriate links and hands these links to a Diffbot API for processing. All structured page results are then compiled into a single "collection", which can be downloaded in full or searched using the [Search API](#search-api).
 
 ### Creating a Crawl: Basics
 Each crawl requires, at minimum, the following:
@@ -50,6 +50,7 @@ For example, to limit crawling at diffbot.com to only "blog.diffbot.com" pages, 
 You can also supply **negative** crawl patterns by prepending a "!" in front of your pattern. You can supply as many negative patterns as you like. All matching URLs will be skipped.
 
 ![Crawl Patternsl](/images/crawl_patterns.png "This restricts the spider to "category" URLs, and prevents any URLs with "/author/" or "/page/" from being spidered.")
+
 This restricts the spider to "category" URLs, and prevents any URLs with "/author/" or "/page/" from being spidered.
 
 You can also use the `^` and `$` characters -- borrowed from regular-expression syntax -- to specify the start and end of a pattern. For instance, `^http://www.diffbot.com` will match URLs starting with "http://www.diffbot.com," and `type=product$` will match all URLs ending in "type=product."
@@ -144,6 +145,6 @@ Each row in the URLs report contains diagnostic information, including:
 * Crawling timestamp
 * Last status of the URL
 
-[See complete details on the URL Report.](#url-report)
+[See complete details on the URL Report.](#crawlbot-url-report)
 
 

@@ -1,6 +1,6 @@
 # Search API
 
-Diffbot's Search API allows you to search the extracted content of one or all of your Diffbot "collections." A collection is a discrete [Crawlbot](#crawlbot) or [Bulk API](#bulk-processing) job, and includes all of the web pages processed within that job.
+Diffbot's Search API allows you to search the extracted content of one or all of your Diffbot "collections". A collection is a discrete [Crawlbot](#crawlbot) or [Bulk API](#bulk-processing) job, and includes all of the web pages processed within that job.
 
 In order to search a collection, you must first create that collection using either Crawlbot or the Bulk API. A collection can be searched before a crawl or bulk job is finished.
 
@@ -10,61 +10,67 @@ To use the Search API, perform a GET request on the following endpoint:
 
 `http://api.diffbot.com/v3/search`
 
-Provide the following arguments:
+### Required Arguments
 
-<table class="controls table table-bordered" border="0" cellpadding="5">
-  <thead><tr><th>Argument</th><th>Description</th></tr></thead>
-  <tbody>
-  <tr><td>token</td><td>Developer <a href="/pricing">token</a></td></tr>
-  <tr><td>query</td><td>Search query. Must be <a href="http://en.wikipedia.org/wiki/Percent-encoding" target="_blank">URL-encoded</a>. Please see <a href="#query-operators">query operators</a> below.</td></tr>
-  <tr><td colspan="2"><strong>Optional arguments</strong></td></tr>
-  <tr><td>col</td><td>Name of the collection (Crawlbot or Bulk API job name) to search. By default the search will operate on all of your token's collections.</td></tr>
-  <tr><td>num</td><td>Number of results to return. Default is 20. To return all results in the search, pass <code>num=all.</code></td></tr>
-  <tr><td>start</td><td>Ordinal position of first result to return. (First position is 0.) Default is 0.</td></tr>
-  </tbody>
-  </table>
+| Argument           | Description                                                                                                                              |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `token`              | Developer [token](https://www.diffbot.com/pricing)  |
+| `query`              | Search query. Must be [URL-encoded](http://en.wikipedia.org/wiki/Percent-encoding) (unless you're using a client which takes care of this step). Please see [query operators](#query-operators) below.    |
 
+### Optional Arguments
+
+| Argument           | Description                                                                                                                              |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `col`                | Name of the collection (Crawlbot or Bulk API job name) to search. By default the search will operate on all of your token's collections. |
+| `num`                | Number of results to return. Default is 20. To return all results in the search, pass `num=all`.                                           |
+| `start`              | Ordinal position of first result to return. (First position is 0.) Default is 0.                                                         |
 
 ## Query Operators
+
+```php
+<?php
+$diffbot = new Diffbot('my_token');
+$search = $diffbot->search('author:"Miles Johnson" AND type:article')->call();
+
+
+foreach ($search as $article) {
+    echo $article->getTitle();
+}
+```
+
 The query argument contains the actual search contents you wish to perform on your collection(s). Multiple operators and values can be combined.
 
-<table class="controls table vanilla" border="0" cellpadding="5">
-  <thead><tr><th>query=</th><th>Returns...</th></tr></thead>
-  <tbody>
-  <tr><td></td><td>Leave blank to return all objects in the collection(s).</td></tr>
-  <tr><td>computer vision</td><td>All objects containing "computer" and "vision" anywhere in all Diffbot-extracted fields.</td></tr>
-  <tr><td>"web page analysis"</td><td>All objects containing the phrase "web page analysis" anywhere in all Diffbot-extracted fields.</td></tr>
-  <tr><td><span>author:<span style="color:#888">"John Henry"</span></span></td><td><span>All objects containing "John Henry" in the <code>author</code> field. All Diffbot fields within a collection can be queried against.</span><br><br>
-  <strong>Other examples:</strong> tags:"Barack Obama", offerPrice:10.00</td></tr>
-  <tr><td><span>images.caption:<span style="color:#888">flower</span></span></td><td><span>All objects containing "flower" in the <code>caption</code> field within a nested <code>images</code> array.</span><br><br>
-  <strong>Other example:</strong> images.url:amazon.com</td></tr>
-  <tr><td><span>type:<span style="color:#888">article</span></span></td><td><span>All objects identified as articles / processed by the Article API.</span><br><br><strong>Other examples:</strong> type:product, type:image</td></tr>
-  <tr><td><span style="color:#888">football</span> -49ers</td><td>All objects containing "football" but not containing "49ers," in all Diffbot-extracted fields.<br><br><strong>Other examples:</strong> title:pantene -title:conditioner, text:diffbot -author:"farhad manjoo"</td></tr>
-  <tr><td><span style="color:#888">john</span> OR <span style="color:#888">paul</span></td><td>Objects containing either "john" or "paul" in Diffbot-extracted fields. <code>OR</code> must be capitalized.<br><br><strong>Other examples:</strong> title:ukraine OR title:putin, "bill clinton" OR "george bush", title:"puppy chow" OR text:"dog food"
-  </td></tr>
-  <tr><td><span style="color:#888">george</span> AND <span style="color:#888">ringo</span></td><td>Objects containing both "george" and "ringo" in Diffbot-extracted fields. <code>AND</code> must be capitalized.<br><br><strong>Other examples:</strong> title:lakers AND text:basketball, "red sox" AND author:"bill simmons"</td></tr>
-
-  <tr><td>(<span style="color:#888">obama</span> OR <span style="color:#888">clinton</span>) AND <span style="color:#888">president</span></td><td>Objects either "obama" or "clinton," and also "president." Parentheses can be used to nest Boolean queries.<br><br><strong>Other examples:</strong> (title:diffbot AND title:robots) OR title:startup</td></tr>
-  <tr><td><span>site:<span style="color:#888">diffbot.com</span></span></td><td><span>All objects extracted from diffbot.com. The site operator queries against values in the <code>pageUrl</code> and <code>resolvedPageUrl</code> fields.</span></td></tr>
-  <tr><td><span>sortby:<span style="color:#888">timestamp</span></span></td><td>Objects sorted (descending) by the specified Diffbot field. Must be a numeric (e.g. "offerPrice") or date field. For date formatting, see <a href="#date-queries">Date Queries</a> below.</td></tr>
-  <tr><td><span>revsortby:<span style="color:#888">date</span></span></td><td>Objects sorted (ascending) by the specified Diffbot field. Must be a numeric or date field. For date formatting, see <a href="#date-queries">Date Queries</a> below.</td></tr>
- <tr><td><span>min:<span style="color:#888">timestamp:1426784899</span></span></td><td>All objects indexed (processed) after March 19, 2015 (in Unix epoch time). The <code>min</code> or <code>max</code> operators work only with numeric or date fields. For date formatting options, see <a href="#date">Date Queries</a> below.</td></tr>
- <tr><td><span>max:<span style="color:#888">offerPrice:1000</span></span></td><td>All objects with an offerPrice value equal to or less than "1000." Must be a numeric or date field. For date formatting options, see <a href="#date-queries">Date Queries</a> below.</td></tr>
-  </tbody>
-  </table>
+| query=          | Returns...  |
+| -------------------------------- | ---- |
+|| Leave blank to return all objects in the collection(s).        |
+| computer vision | All objects containing "computer" and "vision" anywhere in all Diffbot-extracted fields.         |
+| "web page analysis"              | All objects containing the phrase "web page analysis" anywhere in all Diffbot-extracted fields.  |
+| author:<span class="fadedSpan">"John Henry"</span>              | All objects containing "John Henry" in the `author` field. All Diffbot fields within a collection can be queried against.
+  **Other examples**: tags:"Barack Obama", offerPrice:10.00       |
+| images.caption:<span class="fadedSpan">flower</span>            | All objects containing "flower" in the `caption` field within a nested `images` array.
+  Other example: images.url:amazon.com          |
+| type:<span class="fadedSpan">article</span>    | All objects identified as articles / processed by the Article API.**Other examples**: type:product, type:image        |
+| <span class="fadedSpan">football</span> -49ers | All objects containing "football" but not containing "49ers," in all Diffbot-extracted fields.**Other examples**: title:pantene -title:conditioner, text:diffbot -author:"farhad manjoo"  |
+| <span class="fadedSpan">john</span> OR <span class="fadedSpan">paul</span>    | Objects containing either "john" or "paul" in Diffbot-extracted fields. `OR` must be capitalized.**Other examples**: title:ukraine OR title:putin, "bill clinton" OR "george bush", title:"puppy chow" OR text:"dog food"
+    |
+| <span class="fadedSpan">george</span> AND <span class="fadedSpan">ringo</span>| Objects containing both "george" and "ringo" in Diffbot-extracted fields. `AND` must be capitalized.**Other examples**: title:lakers AND text:basketball, "red sox" AND author:"bill simmons"                |
+| (<span class="fadedSpan">obama</span> OR <span class="fadedSpan">clinton</span>) AND <span class="fadedSpan">president</span> | Objects either "obama" or "clinton," and also "president." Parentheses can be used to nest Boolean queries.**Other examples**: (title:diffbot AND title:robots) OR title:startup          |
+| site:<span class="fadedSpan">diffbot.com</span>| All objects extracted from diffbot.com. The site operator queries against values in the `pageUrl` and `resolvedPageUrl` fields.        |
+| sortby:<span class="fadedSpan">timestamp</span>| Objects sorted (descending) by the specified Diffbot field. Must be a numeric (e.g. "offerPrice") or date field. For date formatting, see [Date Queries](#date-queries) below.        |
+| revsortby:<span class="fadedSpan">date</span>  | Objects sorted (ascending) by the specified Diffbot field. Must be a numeric or date field. For date formatting, see [Date Queries](#date-queries) below.            |
+| min:<span class="fadedSpan">timestamp:1426784899</span>         | All objects indexed (processed) after March 19, 2015 (in Unix epoch time). The `min` or `max` operators work only with numeric or date fields. For date formatting options, see [Date Queries](#date-queries) below.        |
+| max:<span class="fadedSpan">offerPrice:1000</span>              | All objects with an offerPrice value equal to or less than "1000." Must be a numeric or date field. For date formatting options, see [Date Queries](#date-queries) below.                                                                |
 
 #### Query URL Encoding
 Be sure to [URL-encode](http://en.wikipedia.org/wiki/Percent-encoding) your query. The following examples show some sample queries properly encoded.
 
-<table class="controls table vanilla" border="0" cellpadding="5">
-  <thead><tr><th>Query</th><th>URL-Encoded Query</th></tr></thead>
-  <tbody>
-  <tr><td>computer vision</td><td>computer%20vision</td></tr>
-  <tr><td>obama type:article sortby:date</td><td>obama%20type%3Aarticle%20sortby%3Adate</td></tr>
-  <tr><td>text:cats author:"Jet Li" min:date:1399669321</td><td><div class="wordwrap">text%3Acats%20author%3A%22Jet%20Li%22%20min%3Adate%3A1399669321</div></td></tr>
-  <tr><td>min:date:"Thu, 22 May 2014 00:00:00 GMT"</td><td><div class="wordwrap">min%3Adate%3A%22Thu%2C%2022%20May%202014%2000%3A00%3A00%20GMT%22</div></td></tr>
-  </tbody>
-  </table>
+| Query                                         | URL-Encoded Query                                                            |
+| --------------------------------------------- | ---------------------------------------------------------------------------- |
+| computer vision                               | computer%20vision                                                            |
+| obama type:article sortby:date                | obama%20type%3Aarticle%20sortby%3Adate                                       |
+| text:cats author:"Jet Li" min:date:1399669321 | text%3Acats%20author%3A%22Jet%20Li%22%20min%3Adate%3A1399669321              |
+| min:date:"Thu, 22 May 2014 00:00:00 GMT"      | min%3Adate%3A%22Thu%2C%2022%20May%202014%2000%3A00%3A00%20GMT%22             |
+
 
 The space character can be represented by "%20" or the "+"-sign.
 
@@ -129,9 +135,17 @@ The specific fields returned within each object depend upon the type of each obj
 
 
 ### Example Searches
+
 ```shell
 curl http://api.diffbot.com/v3/search?token={token}&num=40&col=dailycrawl&query=type%3Aarticle%20sortby%3Adate`
 ```
+
+```php
+<?php
+$diffbot = new Diffbot('my_token');
+$search = $diffbot->search('type:article sortby:date')->setCol->('dailycrawl')->setNum(40)->call();
+```
+
 **The most recently-written 40 articles in the "dailycrawl" collection.**
 
 
@@ -141,11 +155,24 @@ col: `dailycrawl`
 
 num: `40`
 
-<br><br><br>
+---
+
 
 ```shell
 curl http://api.diffbot.com/v3/search?token={token}&num=100&col=sports&query=type%3Aarticle%20author%3A%22Bill%20Simmons%22%20site%3Agrandland.com%20revsortby%3Adate
 ```
+
+```php
+<?php
+$diffbot = new Diffbot('my_token');
+$search = 
+    $diffbot->search('type:article author:"Bill Simmons" site:grandland.com revsortby:date')
+            ->setCol('sports')
+            ->setNum(100)
+            ->call();
+```
+
+
 **100 articles written by Bill Simmons, at Grantland.com, from the "sports" collection, ordered by oldest first.**
 
 query: `type:article author:"Bill Simmons" site:grandland.com revsortby:date`
@@ -153,21 +180,42 @@ query: `type:article author:"Bill Simmons" site:grandland.com revsortby:date`
 col: `sports`
 
 num: `100`
-<br><br><br>
 
+
+---
 
 ```shell
 curl http://api.diffbot.com/v3/search?token={token}&query=text%3Aukraine%20OR%20text%3Arussia%20sortby%3Atimestamp
 ```
+
+```php
+<?php
+$diffbot = new Diffbot('my_token');
+$search = $diffbot->search('text:ukraine OR text:russia sortby:timestamp')->call();
+```
+
+
 **20 articles mentioning "ukraine" or "Russia" in the main text, ordered by most recently indexed/crawled, from all collections:**
 
 query: `text:ukraine OR text:russia sortby:timestamp`
 
-<br><br><br>
+---
 
 ```shell
 curl http://api.diffbot.com/v3/search?token={token}&col=shoestores&start=20query=type%3Aproduct%20title%3Anike%20min%3AofferPrice%3A40%20max%3AofferPrice%3A50
 ```
+
+
+```php
+<?php
+$diffbot = new Diffbot('my_token');
+$search = 
+    $diffbot->search('type:product title:nike min:offerPrice:40 max:offerPrice:50')
+            ->setCol('shoestores')
+            ->setStart(20)
+            ->call();
+```
+
 
 **The second page of 20 products with "Nike" in the title, between $40 and $50, from the "shoestores" collection:**
 
