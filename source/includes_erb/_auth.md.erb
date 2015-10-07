@@ -1,0 +1,22 @@
+## Authentication
+
+```php
+<?php
+
+$diffbot = new Diffbot('mrrobotico');
+```
+
+
+Diffbot uses API tokens to grant access to the API. You can register for a Diffbot API key [here](https://www.diffbot.com/plans/trial).
+
+
+
+Diffbot expects the API token to be included in all API requests to the server as a query parameter like so:
+
+`?token=mrrobotico`
+
+<aside class="notice">
+You must replace <code>mrrobotico</code> with your personal API token.
+</aside>
+
+Note that most good clients will have their language specific setters for defining your token, and having to add it in as a query parameter will likely be easily avoidable - see examples to the right.

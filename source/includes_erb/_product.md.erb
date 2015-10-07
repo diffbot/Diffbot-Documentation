@@ -1,0 +1,365 @@
+# Product API
+The Product API automatically extracts complete data from any shopping or e-commerce product page. Retrieve full pricing information, product IDs (SKU, UPC, MPN), images, product specifications, brand and more.
+
+## Request
+
+
+```shell
+curl "http://api.diffbot.com/v3/product?token={token}&url=http%3A%2F%2Fus.levi.com%2Fproduct%2Findex.jsp%3FproductId%3D2076855"
+```
+
+<%= partial("includes_erb/partials/to_use_api", :locals => { :api => "product" }) %>
+
+### Required Arguments
+
+```php
+<?php
+
+$diffbot = new Diffbot('my_token');
+$url = 'http://us.levi.com/product/index.jsp?productId=2076855';
+$productApi = $diffbot->createProductApi($url);
+```
+
+
+<%= partial "includes_erb/partials/table_required_arguments" %>
+
+### Optional Arguments
+```php
+<?php
+
+$productApi->setMeta(true);
+ 
+// setters can also be chained
+
+$productApi
+            ->setBreadcrumb(true)
+            ->setQuerystring(true)
+            ->setLinks(true);
+            
+$productApi
+            ->setDiscussion(false)
+            ->setTimeout(30000);
+```
+
+| Argument           | Description    |
+| ------------------ | --------------------------------------------------------------- |<%= partial "includes_erb/partials/table_common_optional_arguments" %>| <nobr>`discussion`</nobr>         | Pass discussion=false to disable automatic extraction of product reviews. See [below](#review-extraction).      |
+
+<%= partial("includes_erb/partials/fields", :locals => {:table => "response46"}) %>
+
+
+## Response 
+
+> Example: processing the link http://us.levi.com/product/index.jsp?productId=2076855
+
+```php
+<?php
+
+echo $result->title; // prints out "501® Original Shrink-to-Fit™ Jeans"
+echo $result->type; // prints out "product"
+echo $result->text; // prints the text version of the product's description
+echo $result->sku; // prints out 005010000
+echo $result->isAvailable() // returns true
+
+// or, get the whole json dump with
+$dump = $result->getResponse()->getBody();
+
+// or as a PHP array
+$dump = $result->getResponse()->json();
+```
+
+```shell
+curl 'http://api.diffbot.com/v3/product?token={token}&url=http%3A%2F%2Fus.levi.com%2Fproduct%2Findex.jsp%3FproductId%3D2076855'
+```
+
+
+> The full json dump will look something like this:
+
+```json
+{
+    "request": {
+        "pageUrl": "http://us.levi.com/product/index.jsp?productId=2076855",
+        "api": "product",
+        "version": 3
+    },
+    "objects": [
+        {
+            "text": "Details\\\nRaw, rough, and as pure as jeans can be, Shrink–to–Fit™ are the real deal. Pre 1960's, this was the only way you could get your jeans. Breaking them in by wearing and not washing them is all part of the process. They truly improve with age, becoming a second skin, perfectly fitted to your body and how you move. These are for all you denim purists who want to leave a mark—every crease, tiny hole, and fray will be your very own.",
+            "discussion": {
+                "tags": [
+                    {
+                        "id": 36209,
+                        "count": 2,
+                        "prevalence": 0.5,
+                        "label": "Denim",
+                        "uri": "http://dbpedia.org/resource/Denim"
+                    },
+                    {
+                        "id": 449631,
+                        "count": 1,
+                        "prevalence": 0.25,
+                        "label": "Basketball",
+                        "type": "Http://wikidata.dbpedia.org/resource/Q1914636",
+                        "uri": "http://dbpedia.org/resource/Basketball"
+                    },
+                    {
+                        "id": 1043326,
+                        "count": 1,
+                        "prevalence": 0.25,
+                        "label": "Levi Strauss & Co.",
+                        "type": "organization",
+                        "uri": "http://dbpedia.org/resource/Levi_Strauss_&_Co."
+                    }
+                ],
+                "title": "501® Original Shrink-to-Fit™ Jeans",
+                "numPosts": 8,
+                "diffbotUri": "discussion|3|263916231",
+                "pageUrl": "http://www.levi.com/US/en_US/mens-jeans/p/005010000",
+                "posts": [
+                    {
+                        "tags": [
+                            {
+                                "id": 449631,
+                                "count": 1,
+                                "label": "Basketball",
+                                "type": "Http://wikidata.dbpedia.org/resource/Q1914636",
+                                "uri": "http://dbpedia.org/resource/Basketball"
+                            },
+                            {
+                                "id": 1043326,
+                                "count": 1,
+                                "label": "Levi Strauss & Co.",
+                                "type": "organization",
+                                "uri": "http://dbpedia.org/resource/Levi_Strauss_&_Co."
+                            }
+                        ],
+                        "id": 0,
+                        "author": "Tammy",
+                        "text": "Levi's are my husbands favorite jeans. However he is built like basketball player 30w x 40l the only jeans I can find with 40 length are large waisted. No one carries a length that long anymore and I know he isn't the only one in the world that wears them.",
+                        "pageUrl": "http://www.levi.com/US/en_US/mens-jeans/p/005010000",
+                        "diffbotUri": "post|3|-474767462",
+                        "authorUrl": "http://ugc.levi.com/profiles/9090-en_us/ar78tzlqfa513pvxhv21ni880/profile.htm",
+                        "html": "<p>Levi's are my husbands favorite jeans. However he is built like basketball player 30w x 40l the only jeans I can find with 40 length are large waisted. No one carries a length that long anymore and I know he isn't the only one in the world that wears them.<\\/p>",
+                        "humanLanguage": "en",
+                        "date": "Tue, 30 Jun 2015 00:00:00 GMT",
+                        "type": "post"
+                    },
+                    {
+                        "id": 1,
+                        "author": "Donniew",
+                        "text": "These jeans are the very same ones you remember from childhood a were lucky enough to get. We were poor and these were expensive then so the 2 pair per year Mom bought me were a huge treat. These are exactly the same as I remember. Be sure and allow for the shrinkage factor when you buy as they do shrink considerably with the first wash.",
+                        "pageUrl": "http://www.levi.com/US/en_US/mens-jeans/p/005010000",
+                        "diffbotUri": "post|3|-1227298117",
+                        "authorUrl": "http://ugc.levi.com/profiles/9090-en_us/36cce01843d7a4860f76815a344f047ef7c3428fcff1832d5367a565120640b2/profile.htm",
+                        "html": "<p>These jeans are the very same ones you remember from childhood a were lucky enough to get. We were poor and these were expensive then so the 2 pair per year Mom bought me were a huge treat. These are exactly the same as I remember. Be sure and allow for the shrinkage factor when you buy as they do shrink considerably with the first wash.<\\/p>",
+                        "humanLanguage": "en",
+                        "date": "Sun, 07 Jun 2015 00:00:00 GMT",
+                        "type": "post"
+                    },
+                    {
+                        "id": 2,
+                        "author": "dakotablu",
+                        "text": "No matter what you try and what you buy, you just can't beat the quality and the fit of 501 STF. I've been wearing them for over 40 years.",
+                        "pageUrl": "http://www.levi.com/US/en_US/mens-jeans/p/005010000",
+                        "diffbotUri": "post|3|-1594446806",
+                        "authorUrl": "http://ugc.levi.com/profiles/9090-en_us/cbf5869250ea74a7813c232574d0f731072aba96917ac172cfa1a6e046dec5f3/profile.htm",
+                        "html": "<p>No matter what you try and what you buy, you just can't beat the quality and the fit of 501 STF. I've been wearing them for over 40 years.<\\/p>",
+                        "humanLanguage": "en",
+                        "date": "Fri, 05 Jun 2015 00:00:00 GMT",
+                        "type": "post"
+                    },
+                    {
+                        "id": 3,
+                        "author": "notolevis",
+                        "text": "I thought that Levis were supposed to last almost forever. I took care of them as directed, washed only as needed, and followed the shrink to fit regimen. After 1.5 years of wearing them in a rotation with my other clothes, the inseam ripped out. They had just started to \"age\" the way that I wanted them to. Definitely an inferior product. I have dress slacks that last(ed) much longer.",
+                        "pageUrl": "http://www.levi.com/US/en_US/mens-jeans/p/005010000",
+                        "diffbotUri": "post|3|750600255",
+                        "authorUrl": "http://ugc.levi.com/profiles/9090-en_us/dab6bdef5c25c8c81795800e29d71350fb69ec4fda82a077f568e80ec806f34b/profile.htm",
+                        "html": "<p>I thought that Levis were supposed to last almost forever. I took care of them as directed, washed only as needed, and followed the shrink to fit regimen. After 1.5 years of wearing them in a rotation with my other clothes, the inseam ripped out. They had just started to &quot;age&quot; the way that I wanted them to. Definitely an inferior product. I have dress slacks that last(ed) much longer.<\\/p>",
+                        "humanLanguage": "en",
+                        "date": "Tue, 28 Apr 2015 00:00:00 GMT",
+                        "type": "post"
+                    },
+                    {
+                        "tags": [
+                            {
+                                "id": 36209,
+                                "count": 1,
+                                "label": "Denim",
+                                "uri": "http://dbpedia.org/resource/Denim"
+                            }
+                        ],
+                        "id": 4,
+                        "author": "PunaDave",
+                        "text": "as others have stated...take your normal size and add 1 inch to the waist and 2 inches to the length. Grab a belt and roll up the cuffs then wear them UNWASHED for a day or so (maybe on a weekend when you're at home). Let them soak in the hottest water you can obtain for at least 30 min. then let them hang dry until damp. Then wear them until completely dry (this helps the shrink-to-fit process).\\\nThe product...the quality of denim isn't as robust as I remember from my youth. The hem is MUCH smaller too.",
+                        "pageUrl": "http://www.levi.com/US/en_US/mens-jeans/p/005010000",
+                        "diffbotUri": "post|3|-1279676114",
+                        "authorUrl": "http://ugc.levi.com/profiles/9090-en_us/e669e88b4c4d1f55c0b5b705868095a8fb69ec4fda82a077f568e80ec806f34b/profile.htm",
+                        "html": "<p>as others have stated...take your normal size and add 1 inch to the waist and 2 inches to the length. Grab a belt and roll up the cuffs then wear them UNWASHED for a day or so (maybe on a weekend when you're at home). Let them soak in the hottest water you can obtain for at least 30 min. then let them hang dry until damp. Then wear them until completely dry (this helps the shrink-to-fit process).<br>\\\nThe product...the quality of denim isn't as robust as I remember from my youth. The hem is MUCH smaller too.<\\/p>",
+                        "humanLanguage": "en",
+                        "date": "Tue, 21 Apr 2015 00:00:00 GMT",
+                        "type": "post"
+                    },
+                    {
+                        "id": 5,
+                        "author": "Patsarge",
+                        "text": "Started wearing Levis in the early 50s. Have worn them all my life with no exceptions they were 501'shrink to fits. The quality of the jeans has pretty much sunk to a level that no longer compares to what I grew up wearing. The material is not nearly what I was accustomed to over the years. No one carries them locally that will fit anyone over 6' tall so they have to be ordered and they are no heavier than anything else made at 1/2 the price...",
+                        "pageUrl": "http://www.levi.com/US/en_US/mens-jeans/p/005010000",
+                        "diffbotUri": "post|3|120941986",
+                        "authorUrl": "http://ugc.levi.com/profiles/9090-en_us/2a83d347d8d272c6ff965ac566cbf57b7d3bd1733d05e137748a107f030280a1/profile.htm",
+                        "html": "<p>Started wearing Levis in the early 50s. Have worn them all my life with no exceptions they were 501'shrink to fits. The quality of the jeans has pretty much sunk to a level that no longer compares to what I grew up wearing. The material is not nearly what I was accustomed to over the years. No one carries them locally that will fit anyone over 6' tall so they have to be ordered and they are no heavier than anything else made at 1/2 the price...<\\/p>",
+                        "humanLanguage": "en",
+                        "date": "Tue, 14 Apr 2015 00:00:00 GMT",
+                        "type": "post"
+                    },
+                    {
+                        "id": 6,
+                        "author": "BSHAW",
+                        "text": "Fit  \\\n\\\nTrue to size \\\nBeen wearing 501 since 1965! I switch back and forth from shrink to fit, and regular 501.\\\nThe trucker jacket is my 5th. Lost some and got fatter. Lol.",
+                        "pageUrl": "http://www.levi.com/US/en_US/mens-jeans/p/005010000",
+                        "diffbotUri": "post|3|-227479057",
+                        "authorUrl": "http://ugc.levi.com/profiles/9090-en_us/7ffa67959702355d0fb26ad61fa758b1fb69ec4fda82a077f568e80ec806f34b/profile.htm",
+                        "html": "<p>Fit<\\/p>\\\n<p>True to size<\\/p>\\\n<p>Been wearing 501 since 1965! I switch back and forth from shrink to fit, and regular 501.<\\/p>\\\n<p>The trucker jacket is my 5th. Lost some and got fatter. Lol.<\\/p>",
+                        "humanLanguage": "en",
+                        "date": "Sat, 11 Apr 2015 00:00:00 GMT",
+                        "type": "post"
+                    },
+                    {
+                        "tags": [
+                            {
+                                "id": 36209,
+                                "count": 1,
+                                "label": "Denim",
+                                "uri": "http://dbpedia.org/resource/Denim"
+                            }
+                        ],
+                        "id": 7,
+                        "author": "zevb",
+                        "text": "I have been purchasing these jeans for years and they always held up after multiple washes. The prior pairs I had lasted for close to 4 years. Suddenly this pair wore out almost immediately and the knees became paper thin. Inferior denim, more expensive and rear pocket was moved lower.",
+                        "pageUrl": "http://www.levi.com/US/en_US/mens-jeans/p/005010000",
+                        "diffbotUri": "post|3|168541451",
+                        "authorUrl": "http://ugc.levi.com/profiles/9090-en_us/fc77e81aef7336500de1a23f6a8d2ee37d3bd1733d05e137748a107f030280a1/profile.htm",
+                        "html": "<p>I have been purchasing these jeans for years and they always held up after multiple washes. The prior pairs I had lasted for close to 4 years. Suddenly this pair wore out almost immediately and the knees became paper thin. Inferior denim, more expensive and rear pocket was moved lower.<\\/p>",
+                        "humanLanguage": "en",
+                        "date": "Wed, 08 Apr 2015 00:00:00 GMT",
+                        "type": "post"
+                    }
+                ],
+                "confidence": 0.6399999862670893,
+                "numPages": 1,
+                "type": "discussion",
+                "participants": 8
+            },
+            "pageUrl": "http://us.levi.com/product/index.jsp?productId=2076855",
+            "humanLanguage": "en",
+            "offerPriceDetails": {
+                "amount": 68,
+                "text": "$68.00",
+                "symbol": "$"
+            },
+            "type": "product",
+            "sku": "005010000",
+            "resolvedPageUrl": "http://www.levi.com/US/en_US/mens-jeans/p/005010000",
+            "productId": "005010000",
+            "title": "501® Original Shrink-to-Fit™ Jeans",
+            "diffbotUri": "product|3|931166646",
+            "offerPrice": "$68.00",
+            "images": [
+                {
+                    "height": 593,
+                    "diffbotUri": "image|3|653132072",
+                    "naturalHeight": 800,
+                    "width": 986,
+                    "primary": true,
+                    "naturalWidth": 1330,
+                    "url": "http://lsco.scene7.com/is/image/lsco/Levi/clothing/005010000-2014-fall-front-pdp.jpg?$1330x800main$",
+                    "xpath": "/html[1]/body[1]/div[5]/article[1]/div[1]/div[2]/div[3]/img[1]"
+                }
+            ],
+            "availability": true,
+            "specs": {
+                "yes": "5"
+            }
+        }
+    ]
+}
+```
+
+Diffbot's V3 APIs return information about **all** identified objects on a submitted page.
+
+<%= partial "includes_erb/partials/each_response_intro" %>
+
+Objects in the Product API's `objects` array will include the following:
+
+| Field                                             | Description          |
+| ------------------------------------------------- | --- |<%= partial("includes_erb/partials/table_common_default_fields", :locals => {:object => "product"}) %>| `text`                                              | Text description, if available, of the product.                      |
+| `brand`                                             | Item's brand name.   |
+| `offerPrice`                                        | Offer or actual/final price of the product.                          |
+| `regularPrice`                                      | Regular or original price of the product, if available.              |
+| `shippingAmount`                                    | Shipping price.      |
+| `saveAmount`                                        | Discount or amount saved off the regular price.                      |
+| `priceRange`                                        | If the product is available in a range of prices, the minimum and maximum values will be returned. The lowest price will also be returned as the `offerPrice`.         |
+| `priceRange.minPrice`                                          | The minimum price for the offered item.                              |
+| `priceRange.maxPrice`                                          | The maximum price for the offered item.                              |
+| `quantityPrices`                                    | If the product is available with quantity-based discounts, all identifiable price points will be returned. The lowest price will also be returned as the `offerPrice`. |
+| <nobr>`quantityPrices.minQuantity`</nobr>                                       | The minimum quantity required to purchase for the associated price.  |
+| `quantityPrices.price`                                             | Price of the specific quantity level.                                |
+| `offerPriceDetails`                                 | `offerPrice` separated into its constituent parts: `amount`, `symbol`, and full `text`.                                      |
+| `regularPriceDetails`                               | `regularPrice` separated into its constituent parts: `amount`, `symbol`, and full `text`.                                    |
+| `saveAmountDetails`                                 | `saveAmount` separated into its constituent parts: `amount`, `symbol`, full `text`, and whether or not it is a `percentage` value.                                             |
+| `productId`                                         | Diffbot-determined unique product ID. If `upc`, `isbn`, `mpn` or `sku` are identified on the page, `productId` will select from these values in the above order.               |
+| `upc`                                               | Universal Product Code (UPC/EAN), if available.                      |
+| `sku`                                               | Stock Keeping Unit -- store/vendor inventory number or identifier.   |
+| `mpn`                                               | Manufacturer's Product Number.                                       |
+| `isbn`                                              | International Standard Book Number (ISBN), if available.             |
+| `specs`                                             | If a specifications table or similar data is available on the product page, individual specifications will be returned in the `specs` object as name/value pairs. Names will be normalized to lowercase with spaces replaced by underscores, e.g. `display_resolution`.  |
+| `images`                                            | Array of images, if present within the product.                      |
+| `images.url`                                               | Fully resolved link to image.                                        |
+| `images.title`                                             | Description or caption of the image.                                 |
+| `images.naturalHeight`                                     | Raw image height, in pixels.                                         |
+| `images.naturalWidth`                                      | Raw image width, in pixels.                                          |
+| `images.primary`                                           | Returns `true` if image is identified as primary based on visual analysis.                                             |
+| `images.xpath`                                             | XPath expression identifying the image node.                         |
+| `images.diffbotUri`                                        | Internal ID used for indexing.                                       |
+| `discussion`                                        | Product reviews, as extracted by the Diffbot Discussion API. See [below](#review-extraction).                                              |
+| `prefixCode`                                        | Country of origin as identified by UPC/ISBN.                         |
+| `productOrigin`                                     | If available, two-character ISO country code where the product was produced.                                         |
+
+---
+
+**Optional fields, available using the `&fields=` argument**
+
+| Field             | Description                         |
+| -------------------------------- | ---------------------------------- |
+| <nobr>`availability` (beta)</nobr>                                     | Item's availability, either true or false.                           |
+| `colors` (beta)                                           | Returns array of product color options.                              |
+| `size` (beta)                                             | Size(s) available, if identified on the page.                        |<%= partial "includes_erb/partials/table_optional_fields" %>
+
+### Review Extraction
+
+By default the Product API will attempt to extract user reviews from product pages, using integrated functionality from the Diffbot [Discussion API](#discussion-api). (This behavior can be disabled using the argument `discussion=false`.)
+
+Comment data will be returned in the `discussion` object (nested within the primary product object). The full syntax for discussion data is [available in the Discussion API documentation](#discussion-api).
+                                                 
+
+## Options
+
+<%= partial "includes_erb/partials/auth" %>
+
+<%= partial "includes_erb/partials/custom_http_headers" %>
+
+### Posting Content
+
+> HTML Post Sample:
+
+```
+curl "http://api.diffbot.com/v3/product?token=brunoskvorc&url=http%3A%2F%2Fstore.diffbot.com" -H "Content-Type: text/html" -d '<html><head><title>Something to Buy</title></head><body><h2>A Pair of Jeans</h2><div>Price: $31.99</div></body></html>'
+```
+
+
+If your content is not publicly available (e.g., behind a firewall), you can POST markup or plain text directly to the Product API endpoint for analysis:
+
+`http://api.diffbot.com/v3/product?token={token}&url={url}`
+
+Provide the content to analyze as your POST body, and specify the `Content-Type` header as `text/html`.
+
+Please note that the `url` argument is still required, and will be used to resolve any relative links contained in the markup.

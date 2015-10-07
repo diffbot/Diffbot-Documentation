@@ -1,0 +1,244 @@
+## Crawlbot API
+
+The Crawlbot API allows you to programmatically manage [Crawlbot](#crawlbot) crawls and retrieve output.
+
+
+### Creating or Updating a Crawl
+
+```php
+<?php
+// Create new diffbot as usual
+$diffbot = new Diffbot('my_token');
+
+// The crawlbot needs to be told which API to use to process crawled pages. This is optional - if omitted, it will be told to use the Analyze API with mode set to auto.
+// The "crawl" url is a flag to tell APIs to prepare for consumption with Crawlbot, letting them know they won't be used directly.
+$url = 'crawl';
+$articleApi = $diffbot->createArticleAPI($url)->setDiscussion(false);
+
+// Make a new crawl job. Optionally, pass in API instance
+$crawl = $diffbot->crawl('sitepoint_01', $articleApi);
+
+// Set seeds - seeds are URLs to crawl. By default, passing a subdomain into the crawl will also crawl other subdomains on main domain, including www.
+$crawl->setSeeds(['http://sitepoint.com']);
+
+// Call as usual - an EntityIterator collection of results is returned. In the case of a job's creation, only one job entity will always be returned.
+$job = $crawl->call();
+
+// See JobCrawl class to find out which getters are available 
+dump($job->getDownloadUrl("json")); // outputs download URL to JSON dataset of the job's result
+```
+
+To create a crawl, make a GET request to `http://api.diffbot.com/v3/crawl`.
+
+Provide the following data:
+
+| Parameter | Description          |
+| --------- | --- |
+| `token`              | Developer [token](https://www.diffbot.com/pricing)  |
+| `name`      | Job name. This should be a unique identifier and can be used to modify your crawl or retrieve its output.    |
+| `seeds`     | Seed URL(s). Must be [URL encoded](http://en.wikipedia.org/wiki/Percent-encoding). Separate multiple URLs with whitespace to spider multiple sites within the same crawl. By default Crawlbot will restrict spidering to the entire **domain** ("http://blog.diffbot.com" will include URLs at "http://www.diffbot.com").  |
+| `apiUrl`    | Full Diffbot API URL through which to process pages. E.g., `&apiUrl=http://api.diffbot.com/v3/article` to process matching links via the [Article API](#article-api). The Diffbot API URL can include querystring parameters to tailor the output. For example, `&apiUrl=http://api.diffbot.com/v3/product?fields=querystring,meta` will process matching links using the [Product API](#product-api), and also return the `querystring` and `meta` fields.
+  
+  To automatically identify and process content using our [Analyze API](#analyze-api), pass `apiUrl=http://api.diffbot.com/v3/analyze?mode=auto` to return all page-types.
+  
+  Be sure to URL encode your Diffbot API actions. Note that most clients will abstract and remove the need for encoding. See PHP examples to the right.       |
+  
+  You can refine your crawl using the following optional controls. [Read more on crawling versus processing.](http://support.diffbot.com/crawlbot/whats-the-difference-between-crawling-and-processing/)
+
+
+| Parameter          | Description      |
+| ------------------ | ---------------- |
+| `urlCrawlPattern`                   | Specify ||-separated **strings** to limit pages crawled to those whose URLs contain any of the content strings. You can use the exclamation point to specify a negative string, e.g. `!product` to exclude URLs containing the string "product", and the `^` and `$` characters to limit matches to the beginning or end of the URL. The use of a urlCrawlPattern will allow Crawlbot to spider outside of the seed domain; it will follow all matching URLs regardless of domain.   |
+| `urlCrawlRegEx`      | Specify a regular expression to limit pages **crawled** to those URLs that match your expression. This will override any `urlCrawlPattern` value. The use of a `urlCrawlRegEx` will allow Crawlbot to spider outside of the seed domain; it will follow all matching URLs regardless of domain.            |
+| `urlProcessPattern`  | Specify ||-separated **strings** to limit pages processed to those whose URLs contain any of the content strings. You can use the exclamation point to specify a negative string, e.g. `!/category` to exclude URLs containing the string "/category", and the `^` and `$` characters to limit matches to the beginning or end of the URL.            |
+| `urlProcessRegEx`    | Specify a regular expression to limit pages **processed** to those URLs that match your expression. This will override any `urlProcessPattern` value.|
+| <nobr>`pageProcessPattern`</nobr> | Specify ||-separated strings to limit pages **processed** to those whose HTML contains _any_ of the content strings.            |
+
+Additional (optional) Parameters:
+
+
+| Parameter        | Description                    |
+| ---------------- | ------------------------------ |
+| `maxHops`          | Specify the depth of your crawl. A maxHops=0 will limit **processing** to the seed URL(s) only -- no other links will be processed; `maxHops=1` will process all (otherwise matching) pages whose links appear on seed URL(s); `maxHops=2` will process pages whose links appear on those pages; and so on.By default (`maxHops=-1`) Crawlbot will crawl and process links at any depth. |
+| `maxToCrawl`       | Specify max pages to spider. Default: 100,000.      |
+| `maxToProcess`     | Specify max pages to process through Diffbot APIs. Default: 100,000.     |
+| `notifyEmail`      | Send a message to this email address when the crawl hits the `maxToCrawl` or `maxToProcess` limit, or when the crawl completes.             |
+| `notifyWebhook`    | Pass a URL to be notified when the crawl hits the maxToCrawl or maxToProcess limit, or when the crawl completes. You will receive a POST with `X-Crawl-Name` and `X-Crawl-Status` in the headers, and the full [JSON response](#crawlbot-job-response) in the POST body. We've integrated with Zapier to make webhooks even more powerful; [read more](http://support.diffbot.com/crawlbot/using-zapier-with-crawlbot-or-bulk-api-jobs/) on what you can do with Zapier and Diffbot.              |
+| `crawlDelay`       | Wait this many seconds between each URL crawled from a single IP address. Specify the number of seconds as an integer or floating-point number (e.g., `crawlDelay=0.25`).           |
+| `repeat`           | Specify the number of days as a floating-point (e.g. `repeat=7.0`) to repeat this crawl. By default crawls will not be repeated.          |
+| <nobr>`onlyProcessIfNew`</nobr> | By default repeat crawls will only process new (previously unprocessed) pages. Set to 0 (`onlyProcessIfNew=0`) to process all content on repeat crawls.        |
+| `maxRounds`        | Specify the maximum number of crawl repeats. By default (`maxRounds=0`) repeating crawls will continue indefinitely. |
+
+#### Response
+Upon adding a new crawl, you will receive a success message in the JSON response, in addition to full crawl details.
+
+```json
+"response": "Successfully added urls for spidering."
+```
+
+### Pausing, Restarting or Deleting Crawls
+
+```php
+<?php
+// Force start of a new crawl round manually
+$crawl->roundStart();
+
+// Pause or unpause (0) a job
+$crawl->pause();
+$crawl->pause(0)
+
+// Restart removes all crawled data but keeps the job (and settings)
+$crawl->restart();
+
+// Delete a job and all related data
+$crawl->delete();
+```
+
+You can manage your crawls by making GET requests to the same endpoint, `http://api.diffbot.com/v3/crawl`.
+
+Provide the following data:
+
+| Parameter             | Description                                                                                                                                                                     |
+| --------------------- | ---------- |
+| `token`              | Developer [token](https://www.diffbot.com/pricing)  |
+| `name`                  | Job name as defined when the crawl was created.   |
+| `roundStart`            | Pass `roundStart=1` to force the start of a new crawl "round" (manually repeat the crawl). If `onlyProcessIfNew` is set to 1 (default), only newly-created pages will be processed. |
+| `pause`                 | Pass `pause=1` to pause a crawl. Pass `pause=0` to resume a paused crawl.  |
+| `restart`               | Restart removes all crawled data while maintaining crawl settings. Pass `restart=1` to restart a crawl.  |
+| `delete`                | Pass `delete=1` to delete a crawl, and all associated data, completely.  |
+
+
+### Retrieving Crawlbot Data
+
+To download results please make a GET request to the following URLs, replacing `token` and `jobName` with your token and bulk job name, respectively. The JSON data and URLs report URLs are also available in the Bulk API JSON response, as `downloadJson` and `downloadUrls`.
+
+| URL  | Description            |
+| --------------------------- | ---------- |
+| `http://api.diffbot.com/v3/crawl/download/{token}-{jobName}_data.json`  | Download all JSON objects (as processed by Diffbot APIs).      |
+| `http://api.diffbot.com/v3/crawl/download/{token}-{jobName}_data.csv`   | Download a subset of content -- top-level fields only -- as a comma-separated values (CSV) file.       |
+
+Additionally, use `http://api.diffbot.com/v3/crawl/download/{my_token}-{jobName}_urls.csv` to download the “URLs report” CSV file. This lists all URLs encountered by Crawlbot, and the most recent status for each. Useful for debugging.
+
+### Using the Search API to Retrieve Crawl Data
+
+You can also use Diffbot's [Search API](#search-api) to fine-tune the data retrieved from one (or multiple) Crawlbot or Bulk API jobs.
+
+[Search API documentation](#search-api)
+
+### Viewing Crawl Details
+Your active crawls (and any active Bulk API jobs) will be returned in the `jobs` object in a request made to `http://api.diffbot.com/v3/crawl`.
+
+To retrieve a single crawl's details, provide the crawl's `name` in your request:
+
+| Parameter | Description                |
+| --------- | -------------------------- |
+| `token`              | Developer [token](https://www.diffbot.com/pricing)  |
+| `name`      | Name of crawl to retrieve. |
+
+To view all crawls, simply omit the `name` parameter.
+
+### Crawlbot Job Response
+
+> Sample response from a single crawl:
+
+```json
+{
+  "jobs": [
+    {
+      "name": "crawlJob", 
+      "type": "crawl", 
+      "jobCreationTimeUTC": 1427410692, 
+      "jobCompletionTimeUTC": 1427410798, 
+      "jobStatus": {
+        "status": 9, 
+        "message": "Job has completed and no repeat is scheduled."
+      }, 
+      "sentJobDoneNotification": 1, 
+      "objectsFound": 177, 
+      "urlsHarvested": 2152, 
+      "pageCrawlAttempts": 367, 
+      "pageCrawlSuccesses": 365, 
+      "pageCrawlSuccessesThisRound": 365, 
+      "pageProcessAttempts": 210, 
+      "pageProcessSuccesses": 210, 
+      "pageProcessSuccessesThisRound": 210, 
+      "maxRounds": 0, 
+      "repeat": 0.0, 
+      "crawlDelay": 0.25, 
+      "obeyRobots": 1, 
+      "maxToCrawl": 100000, 
+      "maxToProcess": 100000, 
+      "onlyProcessIfNew": 1, 
+      "seeds": "http://support.diffbot.com", 
+      "roundsCompleted": 0, 
+      "roundStartTime": 0, 
+      "currentTime": 1432312443, 
+      "currentTimeUTC": 1432312443, 
+      "apiUrl": "http://api.diffbot.com/v3/analyze", 
+      "urlCrawlPattern": "", 
+      "urlProcessPattern": "", 
+      "pageProcessPattern": "", 
+      "urlCrawlRegEx": "", 
+      "urlProcessRegEx": "", 
+      "maxHops": -1, 
+      "downloadJson": "http://api.diffbot.com/v3/crawl/download/sampletoken-crawlJob_data.json", 
+      "downloadUrls": "http://api.diffbot.com/v3/crawl/download/sampletoken-crawlJob_urls.csv", 
+      "notifyEmail": "support@diffbot.com", 
+      "notifyWebhook": "http://www.diffbot.com"
+    }
+  ]
+}
+
+```
+
+This will return a JSON response of your token's crawls and Bulk API jobs. 
+
+### Status Codes
+The `jobStatus` object will return the following status codes and associated messages:
+
+| Status | Message                                                                |
+| ------ | ---------------------------------------------------------------------- |
+| 0      | Job is initializing                                                    |
+| 1      | Job has reached maxRounds limit                                        |
+| 2      | Job has reached maxToCrawl limit                                       |
+| 3      | Job has reached maxToProcess limit                                     |
+| 4      | Next round to start in ? seconds                                   |
+| 5      | No URLs were added to the crawl                                        |
+| 6      | Job paused                                                             |
+| 7      | Job in progress                                                        |
+| 8      | All crawling temporarily paused by root administrator for maintenance. |
+| 9      | Job has completed and no repeat is scheduled                           |
+
+
+## Crawlbot URL Report
+
+<%= partial "includes_erb/partials/bulk_processing_url_report" %>
+
+## Tutorials
+
+Several tutorials are available on how to use the Crawlbot API. See the following list, or the videos below:
+
+- [Crawling and Searching Entire Domains with Diffbot]
+- [Turning a Crawled Website into a Search Engine with PHP]
+
+
+### Crawlbot: Basics
+
+  <iframe src="https://www.youtube.com/embed/qH9VYKxU1NI?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;theme=light" frameborder="0" allowfullscreen=""></iframe>
+  
+_A quick overview of Crawlbot using the [Analyze API](#analyze-api) to automatically identify and extract products from an e-commerce site._
+
+### Crawlbot: Advanced Tutorial
+
+  <iframe src="https://www.youtube.com/embed/c2gET-OugTM?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;theme=light" frameborder="0" allowfullscreen=""></iframe>
+
+_This tutorial discusses some of the methods for narrowing your crawl within a site, and setting up a repeat or recurring crawl._
+
+Related links:
+
+* [Various Ways to Control Your Crawlbot Crawls for Web Data](http://blog.diffbot.com/various-ways-to-control-your-crawlbot-crawls-for-web-data/)
+* [Crawlbot Support](http://support.diffbot.com/topics/crawlbot/)
+
+
+[Crawling and Searching Entire Domains with Diffbot]: http://www.sitepoint.com/crawling-searching-entire-domains-diffbot/
+[Turning a Crawled Website into a Search Engine with PHP]: http://www.sitepoint.com/turning-crawled-website-search-engine-php/
